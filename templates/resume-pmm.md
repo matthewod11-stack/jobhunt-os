@@ -49,7 +49,7 @@ Started on accounts, moved to strategy in year two.
 
 - **The repositioning (Brightline Pay).** 30 win/loss interviews, one uncomfortable readout, a new category story. Win rate against the largest competitor improved two quarters running.
 - **Lifecycle rebuild (Brightline Pay).** Positioning is only real if the customer touchpoints carry it. Rebuilt every triggered email to match the new story. $2.1M ARR influenced in nine months (Braze-attributed, first-touch on activation), and sales started lifting lines from the emails into their outbound.
-- **The 60-day paid social kill (Copper & Pine).** Proof that the brand, not the ad budget, was doing the work. The freed spend funded the email program behind the retention gains, and the write-up raised a Series A.
+- **The 60-day paid social kill (Copper & Pine).** Proof that the brand, not the ad budget, was doing the work. The freed spend funded the email program behind the retention gains, and the write-up carried the Series A story.
 
 ## SKILLS
 

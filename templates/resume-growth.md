@@ -48,7 +48,7 @@ Started on accounts, moved to strategy in year two.
 
 ## SELECTED WINS
 
-- **The 60-day paid social kill (Copper & Pine).** The test nobody wanted to run. CAC held, the budget stayed dead for two more quarters, and the freed spend funded the email program behind the repeat-purchase gains. The write-up raised a Series A.
+- **The 60-day paid social kill (Copper & Pine).** The test nobody wanted to run. CAC held, the budget stayed dead for two more quarters, and the freed spend funded the email program behind the repeat-purchase gains. The write-up carried the Series A story.
 - **Lifecycle rebuild (Brightline Pay).** Six tired campaigns became a triggered system tied to what customers actually did. $2.1M ARR influenced in nine months (Braze-attributed, first-touch on activation). Still running at steady state: 14 triggered flows across five segments, owned by a marketer I trained.
 - **The test log.** Every experiment written up, wins and losers, readable by anyone. Copied by two other teams, then adopted by product for feature experiments. Cheap to run, hard to argue with.
 

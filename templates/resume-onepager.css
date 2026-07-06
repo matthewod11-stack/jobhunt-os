@@ -1,0 +1,25 @@
+/* One-pager override — layered ON TOP of resume.css via weasyprint -s.
+ *
+ * Purpose: dense single-page resumes carry a bit more content than the base
+ * templates and spill a line or two onto a 2nd page. This reclaims that vertical
+ * space with a slightly tighter line-height and section spacing — NOT a smaller
+ * body font — so the result stays comfortably readable.
+ *
+ * Tuning: line-height 1.30 at 0.55in top/bottom margins is the loosest setting
+ * that holds one page for the current People one-pager. Very dense resumes may
+ * need line-height nudged toward 1.22 (the floor that still reads cleanly).
+ *
+ * Usage:  build-resume.sh --onepager <file.md>
+ */
+@page { margin: 0.55in 0.6in 0.55in 0.6in; }
+body { line-height: 1.30; }
+
+/* Summary paragraph (2nd <p> after the h1) — trim its bottom gap */
+h1 + p + p { margin-bottom: 6pt; }
+
+/* Section headers — main cumulative reclaim (several sections × top margin) */
+h2 { margin: 7pt 0 4pt 0; }
+
+/* Bullet lists and items */
+ul { margin: 2pt 0 5pt 0; }
+li { margin-bottom: 1.5pt; }

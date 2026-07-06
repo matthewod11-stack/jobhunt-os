@@ -1,0 +1,94 @@
+@page {
+  size: letter;
+  margin: 0.5in 0.6in 0.5in 0.6in;
+}
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9.5pt;
+  line-height: 1.35;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Name */
+h1 {
+  font-size: 20pt;
+  margin: 0 0 2pt 0;
+  font-weight: 700;
+  color: #000;
+}
+
+/* Contact line — first <p> after the h1 */
+h1 + p {
+  font-size: 9pt;
+  color: #444;
+  margin: 0 0 6pt 0;
+}
+h1 + p a {
+  color: #444;
+  text-decoration: none;
+}
+
+/* Summary — second <p> after h1 (p immediately after contact p) */
+h1 + p + p {
+  font-size: 9.5pt;
+  line-height: 1.4;
+  margin-bottom: 10pt;
+}
+
+/* Section headers */
+h2 {
+  font-size: 10.5pt;
+  text-transform: uppercase;
+  letter-spacing: 1.2pt;
+  border-bottom: 1px solid #999;
+  padding-bottom: 2pt;
+  margin: 10pt 0 6pt 0;
+  font-weight: 700;
+  color: #000;
+}
+
+/* General paragraphs */
+p {
+  margin: 0 0 3pt 0;
+  font-size: 9.5pt;
+}
+
+/* Job title lines: <p> containing <strong> right after h2 or ul */
+/* These are styled bold by the markdown already */
+
+/* Company/context lines (italic paragraphs) */
+p > em:only-child {
+  font-size: 9pt;
+  color: #555;
+}
+
+/* Bullet lists */
+ul {
+  margin: 2pt 0 6pt 0;
+  padding-left: 0;
+  list-style: none;
+}
+li {
+  margin-bottom: 1.5pt;
+  font-size: 9pt;
+  padding-left: 12pt;
+  text-indent: -8pt;
+}
+li::before {
+  content: "\2022\00a0\00a0";
+  font-size: 8pt;
+}
+
+/* Skills/Tools section — keep compact */
+p > strong:first-child {
+  font-size: 9pt;
+}
+
+/* Education — keep both on their own lines */
+/* Handled by default p styling */
+
+/* Project tech tags */
+em {
+  color: #555;
+}

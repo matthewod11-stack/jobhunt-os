@@ -13,7 +13,7 @@
 
 - Laid off in a 40% GTM cut: say it plainly in one sentence, then move forward. Don't over-explain; over-explaining reads as shame.
 - Never open with tenure ("11 years"). Open with what changed or what you built.
-- Numbers travel with their attribution. "$2.1M ARR influenced" always carries "(Braze-attributed, first-touch on activation)" or it invites the question you don't want mid-interview.
+- Numbers travel with their attribution. In writing, "$2.1M ARR influenced" always carries "(Braze-attributed, first-touch on activation)". Spoken aloud, hold the attribution ready for the follow-up question instead of front-loading it.
 - Managing four people is a fact, not a headline. Lead with what the team shipped, mention the team in the mechanism.
 
 ## Language discipline
@@ -28,4 +28,4 @@ profile/voice.md is the source of truth: sentence shape, the banned-word list, m
 
 /debrief adds reusable lessons here.
 
-- The paid-social-kill story lands hardest when the size of the freed budget comes first. Open with the dollar figure, then the 60 days, then the CAC result. Leading with the timeline buries the stakes. [promoted from solara-post-call-1]
+- The paid-social-kill story lands hardest when the size of the freed budget comes first. Open with the dollar figure, then the 60 days, then the CAC result. Leading with the timeline buries the stakes. (This supersedes the stories-bank framing above. Propagate on the next edit. That's the loop working.) [promoted from solara-post-call-1]

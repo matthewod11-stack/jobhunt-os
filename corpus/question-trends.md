@@ -61,7 +61,7 @@ Instances: **7**
 
 Common formulations:
 
-- "Why pick up the phone? Why are you interested in this?"
+- "Why did you take this call? What got your attention?"
 - "Why this company / why now?"
 - "How did you hear about us / what piqued your interest?"
 - "What do you know about the company so far?"
@@ -77,8 +77,8 @@ Common formulations:
 
 - "Walk me through a compensation overhaul you ran."
 - "What external data sources do you use?"
-- "How deep does your equity administration experience go?"
-- "What is your visa / immigration scope?"
+- "How deep does your experience go in [specialized subarea of your function]?"
+- "Which parts of the specialist toolkit have you owned directly, versus overseen?"
 - "What tooling baseline exists here, and how would you audit it?"
 
 Prep implication: Specialist depth gets probed whenever the role touches the technical core of your function. The pattern is practical: tools, data sources, implementation detail, compliance boundaries, and partnership with adjacent functions.

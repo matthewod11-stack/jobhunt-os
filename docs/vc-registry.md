@@ -1,6 +1,6 @@
 # VC Registry
 
-This is the list of VC firms `/scout` walks for portfolio companies, tiered by fund size and stage focus. Tier 1 (mega funds) is the default scan; widen to tier 2 (elite early-stage) or tier 3 (specialized/rising) for more leads at the cost of more scan time and API usage. To add a firm, add one table row — portfolio URLs rot over time, so PRs fixing dead links are welcome. This list is Bay-Area-weighted; adapt it to your own geography by adding local firms and deleting ones that aren't relevant to you.
+This is the list of VC firms `/scout` walks for portfolio companies, tiered by fund size and stage focus. Tier 1 (mega funds) is the default scan; widen to tier 2 (elite early-stage funds with proven follow-on and deep bench) or tier 3 (specialized/rising) for more leads at the cost of more scan time and API usage. To add a firm, add one table row — portfolio URLs rot over time, so PRs fixing dead links are welcome. This list is Bay-Area-weighted; adapt it to your own geography by adding local firms and deleting ones that aren't relevant to you. Focus lists each fund's primary investment domains, roughly ordered by activity. A dash in the Blog/News column means the firm has no public blog.
 
 | Firm | Tier | Portfolio URL | Blog/News URL | Focus |
 |------|------|---------------|----------------|-------|

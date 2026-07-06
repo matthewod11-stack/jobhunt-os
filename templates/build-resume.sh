@@ -14,10 +14,16 @@ set -e
 
 for dep in pandoc weasyprint; do
   if ! command -v "$dep" >/dev/null 2>&1; then
-    echo "Error: $dep not installed. macOS: brew install pandoc && pip install weasyprint" >&2
+    echo "Error: $dep is not installed." >&2
+    echo "  macOS:  brew install pandoc weasyprint" >&2
+    echo "  Linux:  sudo apt-get install pandoc && pip install weasyprint" >&2
+    echo "  Docs:   https://doc.courtbouillon.org/weasyprint/stable/first_steps.html" >&2
     exit 1
   fi
 done
+
+ERRLOG=$(mktemp)
+trap 'rm -f "$ERRLOG"' EXIT
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CSS_FILE="$SCRIPT_DIR/resume.css"
@@ -46,7 +52,11 @@ fi
 echo "Converting $INPUT..."
 
 # Step 1: pandoc md → html body
-BODY=$(pandoc "$INPUT" -t html --no-highlight 2>/dev/null)
+if ! BODY=$(pandoc "$INPUT" -t html --no-highlight 2>"$ERRLOG"); then
+  echo "Error: pandoc failed converting $INPUT:" >&2
+  cat "$ERRLOG" >&2
+  exit 1
+fi
 
 # Step 2: wrap as a standalone HTML document (CSS applied via weasyprint -s below)
 cat > "${BASE}.html" <<HTMLEOF
@@ -67,11 +77,19 @@ if [ "$ONEPAGER" -eq 1 ]; then
   WP_STYLES+=(-s "$ONEPAGER_CSS")
   echo "  (one-pager mode: layering resume-onepager.css)"
 fi
-weasyprint "${BASE}.html" "${BASE}.pdf" "${WP_STYLES[@]}" 2>/dev/null
+if ! weasyprint "${BASE}.html" "${BASE}.pdf" "${WP_STYLES[@]}" 2>"$ERRLOG"; then
+  echo "Error: weasyprint failed building ${BASE}.pdf:" >&2
+  cat "$ERRLOG" >&2
+  exit 1
+fi
 echo "  → ${BASE}.pdf"
 
 # Step 4: pandoc md → docx
-pandoc "$INPUT" -o "${BASE}.docx" 2>/dev/null
+if ! pandoc "$INPUT" -o "${BASE}.docx" 2>"$ERRLOG"; then
+  echo "Error: pandoc failed converting $INPUT to docx:" >&2
+  cat "$ERRLOG" >&2
+  exit 1
+fi
 echo "  → ${BASE}.docx"
 
 echo "Done: ${BASE}.{html,pdf,docx}"

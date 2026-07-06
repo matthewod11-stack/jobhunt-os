@@ -14,7 +14,7 @@ jordan@example.com | [LinkedIn](https://linkedin.com/in/jordanreyes-example) | (
 Owned positioning, launches, and lifecycle for the SMB product line. Managed a team of four. Role eliminated in the January 2026 restructure that cut 40% of go-to-market.
 
 - Repositioned the SMB product from "payments API" to "the finance team's operating layer" after running 30 win/loss interviews. New messaging shipped across the site, sales decks, and outbound within one quarter.
-- Rebuilt the lifecycle email program around that positioning: six static campaigns became a behavior-triggered system in Braze that influenced $2.1M in new ARR within nine months.
+- Rebuilt the lifecycle email program around that positioning: six static campaigns became a behavior-triggered system in Braze that influenced $2.1M in new ARR within nine months (Braze-attributed, first-touch on activation).
 - Built the launch process from scratch: three tiers, one owner per launch, a single brief as the source of truth. Ran 11 launches in 2025. Sales never learned about one from a customer.
 - Wrote and maintained the competitive battlecards. Short enough to read mid-call, updated the week a competitor moved, retired when they went stale.
 - Ran quarterly message testing with sales and support before anything shipped externally. The support team caught more bad copy than any agency we ever paid.
@@ -48,8 +48,8 @@ Started on accounts, moved to strategy in year two.
 ## SELECTED WORK
 
 - **The repositioning (Brightline Pay).** 30 win/loss interviews, one uncomfortable readout, a new category story. Win rate against the largest competitor improved two quarters running.
-- **Lifecycle rebuild (Brightline Pay).** Positioning is only real if the customer touchpoints carry it. Rebuilt every triggered email to match the new story. $2.1M ARR influenced in nine months.
-- **The 60-day paid social kill (Copper & Pine).** Proof that the brand, not the ad budget, was doing the work. The write-up raised a Series A.
+- **Lifecycle rebuild (Brightline Pay).** Positioning is only real if the customer touchpoints carry it. Rebuilt every triggered email to match the new story. $2.1M ARR influenced in nine months (Braze-attributed, first-touch on activation), and sales started lifting lines from the emails into their outbound.
+- **The 60-day paid social kill (Copper & Pine).** Proof that the brand, not the ad budget, was doing the work. The freed spend funded the email program behind the retention gains, and the write-up raised a Series A.
 
 ## SKILLS
 

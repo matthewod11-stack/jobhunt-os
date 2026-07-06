@@ -3,7 +3,7 @@
 
 jordan@example.com | [LinkedIn](https://linkedin.com/in/jordanreyes-example) | (510) 555-0143 | Oakland, CA
 
-11 years growing revenue across fintech, DTC, and agency-side. I run growth like a portfolio: fund what compounds, kill what doesn't, write down why. Once turned off an entire paid social budget for 60 days to prove organic and email could hold CAC. It held.
+I run growth like a portfolio: fund what compounds, kill what doesn't, write down why. 11 years growing revenue across fintech, DTC, and agency-side. Once turned off an entire paid social budget for 60 days to prove organic and email could hold CAC. It held.
 
 ## EXPERIENCE
 
@@ -13,7 +13,7 @@ jordan@example.com | [LinkedIn](https://linkedin.com/in/jordanreyes-example) | (
 
 Owned growth and lifecycle for the SMB product line. Managed a team of four across lifecycle, paid, and content. Role eliminated in the January 2026 restructure that cut 40% of go-to-market.
 
-- Rebuilt the lifecycle email program from six static campaigns into a behavior-triggered system in Braze. Influenced $2.1M in new ARR within nine months of launch.
+- Rebuilt the lifecycle email program from six static campaigns into a behavior-triggered system in Braze. Influenced $2.1M in new ARR within nine months of launch (Braze-attributed, first-touch on activation).
 - Raised week-one activation from 34% to 51% by rewriting the onboarding sequence around the customer's first successful payment instead of the feature tour.
 - Cut blended CAC 23% over two years by moving budget out of branded search and into partner referrals and lifecycle.
 - Ran the experimentation program across signup, pricing, and onboarding. Kept a public test log, losers included. The losers were more popular.
@@ -48,9 +48,9 @@ Started on accounts, moved to strategy in year two.
 
 ## SELECTED WINS
 
-- **The 60-day paid social kill (Copper & Pine).** The test nobody wanted to run. CAC held, the budget stayed dead for two more quarters, and the write-up raised a Series A.
-- **Lifecycle rebuild (Brightline Pay).** Six tired campaigns became a triggered system tied to what customers actually did. $2.1M ARR influenced in nine months.
-- **The test log.** Every experiment written up, wins and losers, readable by anyone. Copied by two other teams. Cheap to run, hard to argue with.
+- **The 60-day paid social kill (Copper & Pine).** The test nobody wanted to run. CAC held, the budget stayed dead for two more quarters, and the freed spend funded the email program behind the repeat-purchase gains. The write-up raised a Series A.
+- **Lifecycle rebuild (Brightline Pay).** Six tired campaigns became a triggered system tied to what customers actually did. $2.1M ARR influenced in nine months (Braze-attributed, first-touch on activation). Still running at steady state: 14 triggered flows across five segments, owned by a marketer I trained.
+- **The test log.** Every experiment written up, wins and losers, readable by anyone. Copied by two other teams, then adopted by product for feature experiments. Cheap to run, hard to argue with.
 
 ## SKILLS
 

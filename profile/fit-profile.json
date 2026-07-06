@@ -1,0 +1,14 @@
+{
+  "name": "Jordan Reyes",
+  "lanes": {
+    "growth": "Growth Marketing Lead / Head of Growth — owns acquisition + lifecycle end to end",
+    "pmm": "Product Marketing Manager / Lead — positioning, launches, sales enablement",
+    "generalist": "First or second marketer at seed/Series A — breadth over depth"
+  },
+  "locations": ["SF Bay Area", "Remote (US)"],
+  "stages": ["seed", "series-a", "series-b", "series-c"],
+  "sectors": ["fintech", "developer tools", "consumer"],
+  "comp_floor": "165000 USD base",
+  "avoid": ["pure brand roles", "ad agencies", "crypto-only"],
+  "notes": "Prefers companies where marketing reports to CEO or product, not sales."
+}

@@ -10,7 +10,7 @@ Throughout this command, all paths are relative to the workspace root (the direc
 
 ## Partial progress
 
-Each phase writes its outputs to disk before the next phase begins, so quitting midway leaves the workspace in a usable mixed state (some files theirs, some still Jordan's). If the user stops early, tell them exactly which files are now theirs and which are still example content, and that re-running /setup later is safe: for each phase, check whether the target file still carries the header `<!-- Example output - /setup will replace this with yours. -->` or Jordan Reyes content. If it does, run the phase. If the user has already replaced it, ask whether to regenerate or keep it, then skip or redo accordingly.
+Each phase writes its outputs to disk before the next phase begins, so quitting midway leaves the workspace in a usable mixed state (some files theirs, some still Jordan's). If the user stops early, tell them exactly which files are now theirs and which are still example content, and that re-running /setup later is safe: for each phase, check whether the target file's first line begins `<!-- Example output` (the example-content marker; match on this prefix, not the full literal string, since the dash character in the marker can vary) or the file otherwise carries Jordan Reyes content. If it does, run the phase. If the user has already replaced it, ask whether to regenerate or keep it, then skip or redo accordingly.
 
 ## Phase 1: Intro and inventory
 
@@ -27,7 +27,7 @@ First, read these files to ground yourself in the example content and its shapes
 Then give the user a short (under 150 words) explanation of what /setup will do:
 
 - It interviews them about their resume history, target roles, writing voice, career stories, and search criteria.
-- It REPLACES these example files with their real content: templates/resume-*.md and the built .pdf/.html/.docx artifacts, profile/voice.md, profile/fit-profile.json, corpus/answer-bundles.md, corpus/cheat-sheet.md.
+- It REPLACES these example files with their real content: templates/resume-*.md and the built .pdf/.html/.docx artifacts, profile/voice.md, profile/fit-profile.json, corpus/answer-bundles.md, corpus/cheat-sheet.md, and, if present, the example application and interview docs in applied/ and interview-prep/.
 - corpus/question-trends.md is KEPT as-is. It is shared seed data (anonymized interviewer-question frequencies), not persona content.
 - Expect 20 to 30 minutes of conversation. They can stop at any phase boundary and resume later.
 
@@ -41,9 +41,9 @@ Ask the user to provide their current resume, any of:
 - Give a file path to a .md, .pdf, or .docx (the Read tool handles PDFs; for .docx, convert first with `pandoc <file> -t markdown` via Bash)
 - Multiple resumes are welcome; more raw material means better variants
 
-If they have no resume at all, build their history from an interview instead. For each role, ask (batched per role, not one field at a time): employer, title, dates, what they owned, and 2 or 3 concrete outcomes with numbers where they exist. Work backwards from the most recent role. Also collect: name, email, phone, location, LinkedIn URL (these go in the resume header).
+If they have no resume at all, build their history from an interview instead. For each role, ask (batched per role, not one field at a time): employer, title, dates, what they owned, and 2 or 3 concrete outcomes with numbers where they exist. Work backwards from the most recent role. Also collect: name, email, phone, location, LinkedIn URL (these go in the resume header). These populate the resume header in Phase 4. Skip anything already present in a provided resume.
 
-Before moving on, echo back a compact summary of their work history (roles, dates, standout outcomes) and ask them to correct anything wrong. This summary is the factual backbone for Phase 4; errors here propagate everywhere.
+Before moving on, echo back a compact summary of their work history (roles, dates, standout outcomes) and ask them to correct anything wrong. This summary is the factual backbone for Phase 4; errors here propagate everywhere. Keep the echo brief when the user provided a complete resume file; expand it only for interview-built histories.
 
 ## Phase 3: Lanes interview
 
@@ -60,7 +60,9 @@ Write the lane definitions into your working notes for this session and echo the
 
 ## Phase 4: Generate resume variants
 
-For each lane, write templates/resume-{lane-slug}.md from the user's real history, reframed for that lane. Study the structure of the existing example variants first (header line, summary paragraph, EXPERIENCE with role/company/dates lines, company context italics, bullets) and mirror that structure, since templates/resume.css styles it.
+For each lane, write templates/resume-{lane-slug}.md from the user's real history, reframed for that lane. Study the structure of the existing example variants first and mirror that structure, since templates/resume.css styles it.
+
+Each variant contains, in order: contact header line (name as an H1, then a line with email, LinkedIn, phone, and location separated by " | "); summary paragraph (2-3 sentences, opens with the lane's point of view); `## EXPERIENCE` (roles reverse-chronological, each with a role/company/dates line, a 1-line company-context italic, and 3-6 bullets); `## SELECTED WINS` (2-3 entries, each adding a fact not in the experience bullets); `## SKILLS`; `## EDUCATION`. Insert one `<div style="page-break-before: always;"></div>` at the section boundary nearest the page-1/page-2 break (in the example variants, immediately before `## SELECTED WINS`).
 
 Rules for every variant:
 
@@ -78,6 +80,8 @@ Show each variant to the user and revise until they approve it. Then:
 ## Phase 5: Voice profile
 
 Ask the user for 2 or 3 writing samples: work emails, internal docs, Slack posts, anything they actually wrote in their own voice. NOT their resume. A resume is already performative and will teach you the wrong voice. Paste or file path, either works.
+
+Check sample quality before extracting: if the samples total under ~150 words, are all in one register (e.g. all formal announcements), or contradict each other stylistically, say so and ask for one more sample from a different context. Thin or uniform input produces miscalibrated voice rules, and every downstream artifact inherits them.
 
 From the samples, extract:
 
@@ -150,11 +154,11 @@ Validate the result is parseable JSON (`python3 -c "import json; json.load(open(
 
 ## Phase 8: Cleanup and report
 
-Use AskUserQuestion: "Keep the Jordan Reyes example prep, debrief, and recap docs around for reference, or start with a clean slate?" Options: "Keep for reference" / "Clean slate".
+If applied/ or interview-prep/ contain files with the example-content marker (first line beginning `<!-- Example output`) or Jordan Reyes content, ask via AskUserQuestion: "Keep the Jordan Reyes example prep, debrief, and recap docs around for reference, or start with a clean slate?" Options: "Keep for reference" / "Clean slate". If they're empty, skip this question entirely.
 
 If clean slate:
 
-- Delete example files in applied/ and interview-prep/ (anything carrying the example header or Jordan Reyes content). If those directories are empty or absent, note it and move on.
+- Delete example files in applied/ and interview-prep/ (anything carrying the example-content marker or Jordan Reyes content). If those directories are empty or absent, note it and move on.
 - Clear Jordan's rows from tracker.csv, keeping the header row intact. If the tracker is already header-only, leave it untouched.
 
 If keep: leave them, but remind the user those files are fiction and /scout, /apply, and /prep will ignore or replace them as real work accumulates.

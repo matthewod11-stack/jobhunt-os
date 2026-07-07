@@ -1,6 +1,6 @@
 ---
 description: Tailor a resume variant to a job posting, build the PDF, optionally draft a cover letter, and log it to the tracker
-argument: URL to the job posting
+argument-hint: URL to the job posting
 ---
 
 # /apply
@@ -25,7 +25,9 @@ The goal is output that reads like the user wrote it themselves. ATS AI detectio
 
 ## Step 1: Fetch and analyze the job posting
 
-Fetch the URL provided as $ARGUMENTS using WebFetch. Extract:
+If no URL was passed as $ARGUMENTS, ask the user up front for the job posting URL or the pasted job description text before doing anything else; never WebFetch an empty string.
+
+Fetch the URL using WebFetch. Extract:
 
 - Company name
 - Role title
@@ -34,15 +36,24 @@ Fetch the URL provided as $ARGUMENTS using WebFetch. Extract:
 - Company stage, size, and industry
 - Any cultural signals or specific language they use
 
-If the URL fails (login wall, JS-rendered page, dead link), ask the user to paste the job description directly and work from that.
+If the URL fails, ask the user to paste the job description directly and work from that. Treat a soft failure the same way: if the fetch "succeeds" but the extracted content is thin or clearly not a job description (a JS-shell page from Greenhouse, Lever, or LinkedIn is the common case; login walls and dead links too), that counts as a failed fetch. Fall back to the paste rather than analyzing a page skeleton.
 
 ## Step 2: Recommend a resume variant
 
-List the available variants: `ls templates/resume-*.md`. Read the first 10 lines of each (the header and summary reveal the lane's point of view). Based on the role's core mandate, recommend one variant with 1-2 sentences of reasoning, then confirm with AskUserQuestion, offering each variant as an option so the user can override.
+List the available variants: `ls templates/resume-*.md`. If the glob matches nothing, stop and tell the user to run /setup first; there is nothing to tailor.
+
+Read the first 10 lines of each variant (the header and summary reveal the lane's point of view). Based on the role's core mandate, recommend one variant with 1-2 sentences of reasoning, then confirm with AskUserQuestion, offering each variant as an option so the user can override.
 
 ## Step 3: Read the selected variant
 
 Read the chosen file from templates/ in full. Also read profile/fit-profile.json; you need the `name` field for output filenames and the lane keys for the tracker row.
+
+**Example-content guard.** Before proceeding, check for the shipped example persona (same logic /setup uses):
+
+- If the chosen variant's first line begins with the example-content marker prefix `<!-- Example output` (match on this prefix only, not the full literal string, since the dash character in the marker can vary), it is still the fictional Jordan Reyes example.
+- If profile/fit-profile.json still carries the example persona (the `name` field is "Jordan Reyes"), the profile has not been replaced either.
+
+If either check trips, STOP and tell the user to run /setup first. Tailoring the example content would produce a fictional person's resume submitted under a real application. Do not continue past this point.
 
 ## Step 4: Tailor the resume
 
@@ -64,13 +75,13 @@ DO NOT:
 
 ## Step 5: Save and build the PDF
 
-Get the user's name from the `name` field of profile/fit-profile.json. Save the tailored resume as `applied/{Name} {Company} Resume.md` (e.g. "Jordan Reyes Acme Resume.md"), then build:
+Get the user's name from the `name` field of profile/fit-profile.json. Save the tailored resume as `applied/{Name} {Company} Resume.md` (e.g. "Jordan Reyes Acme Resume.md"). When building the filename, replace any path-unsafe characters in the company name (especially `/`, also `:` and quotes) with a hyphen or a space; "TBD Health / Labs" becomes "TBD Health - Labs". Then build:
 
 ```bash
 ./templates/build-resume.sh "applied/{Name} {Company} Resume.md"
 ```
 
-The script resolves its CSS by absolute path, so it works on files in applied/ without copying anything. It produces .html, .pdf, and .docx next to the .md; delete the .html (build intermediate) and keep the .md, .pdf, and .docx (some application portals want a .docx).
+The script resolves its CSS by absolute path, so it works on files in applied/ without copying anything. It produces .html, .pdf, and .docx next to the .md; delete the .html (build intermediate) and keep the .md, .pdf, and .docx (some application portals want a .docx). (Deleting the .html here while templates/ keeps its .html files is intentional: templates are reference masters, applied docs are one-offs.)
 
 If the script fails because pandoc or weasyprint is not installed, show the install hint it prints, tell the user the .md is complete and the PDF can be built after installing, and continue to Step 7 (skip the PDF review).
 
@@ -113,12 +124,13 @@ tracker.csv is the single log; every application gets a row. Columns, in order:
 Company,Role,Source,Fit Score,Fit Lane,Status,Date Added,Date Applied,Last Touch,Touch Type,Response,Response Date,Notes
 ```
 
-Get today's date with `date +%Y-%m-%d`. Then:
+Get today's date with `date +%Y-%m-%d`. Match existing rows on Company AND Role (both case-insensitive), not company alone. Then:
 
-- **If a row for this company already exists** (match case-insensitively): update it in place. Set Status=Applied, Date Applied=today, Last Touch=today, Touch Type=application. Keep the existing Source, Fit Score, Fit Lane, and Date Added.
+- **If a row for this company and role already exists**: update it in place. Set Status=Applied, Date Applied=today, Last Touch=today, Touch Type=application. Keep the existing Source, Fit Score, Fit Lane, and Date Added.
+- **If the company exists but with a DIFFERENT role**: append a new row for this role rather than overwriting the other one, and flag it to the user ("you already have {Company} tracked for {other role}; adding a second row for {this role}").
 - **If no row exists**: append one. Company and Role from Step 1, Source=applied-direct, Fit Score empty (that's /scout's job), Fit Lane=the lane slug of the variant used, Status=Applied, Date Added=today, Date Applied=today, Last Touch=today, Touch Type=application, Response and Response Date empty, Notes=one short phrase if there's anything worth remembering (else empty).
 
-Quote any field containing a comma. Keep the header row intact and don't disturb other rows.
+CSV rules: quote any field containing a comma; escape embedded double-quotes by doubling them (RFC 4180). Keep the header row intact and don't disturb other rows.
 
 ## Step 9: Report
 

@@ -23,13 +23,15 @@ Exception: corpus/question-trends.md is REAL shared seed data (anonymized interv
 
 `$ARGUMENTS` is `{company} [interviewer] [jd-url]`. Extract:
 
-- **Company name** (required) -- first word or recognizable company name
+- **Company name** (required) -- may be multi-word. If the split between company and interviewer is ambiguous ("Iron Peak Casey Lee" could be company "Iron Peak" + interviewer "Casey Lee" or company "Iron" + a three-word remainder), check the candidate splits against tracker.csv Company values and applied/ filenames first and take the split that lines up with a known company. If it's a first-ever contact and the split is still ambiguous, ask the user rather than guessing.
 - **Interviewer name** (optional) -- words after the company that are not a URL
 - **JD URL** (optional) -- any URL in the arguments
 
 Example: "Acme Jane Rivera https://jobs.example.com/acme/head-of-x", "Acme Jane Rivera", or just "Acme".
 
-If `$ARGUMENTS` is empty, ask the user for at least the company name before doing anything else. If the round type is unclear (recruiter screen vs hiring manager vs panel), ask; it changes the strategy section and the filename.
+If `$ARGUMENTS` is empty, ask the user for at least the company name before doing anything else.
+
+**Classify the round type.** Decide what the round IS: a recruiter/talent screen, a hiring-manager round, a panel/onsite, or something else (exec chat, take-home review). The presence of an interviewer name says nothing about the round type -- a named recruiter is still a screen; the interviewer name affects the FILENAME, not the classification. Classify from what the user told you, and where that's not enough, from Step 1's findings: the tracker row's Status (no row or Status=Applied suggests a first screen; Status=Screen plus a screen debrief on file suggests a later round) and any prior prep/debrief docs (an existing recruiter-prep doc with no debrief yet usually means this IS still the screen). Ask the user only what the docs can't tell you. The round type drives the strategy section, the filename, and the Step 4 status transition.
 
 ## Step 1: Gather existing context
 
@@ -63,11 +65,11 @@ Read these files for framing, fit-point material, and proven answer language:
 
 ### If a JD URL was provided
 
-Fetch the URL and extract the full job description. Save it to `interview-prep/{company}-jd.md` for reference. If the fetch fails or returns a thin JS-shell page instead of a job description, ask the user to paste the JD text and work from that.
+Fetch the URL and extract the full job description. Save it to `interview-prep/{company}-jd.md` for reference. If that file already exists from an earlier round, never overwrite it: append the new JD under a dated heading, or save it as `interview-prep/{company}-jd-{round}.md`. If the fetch fails or returns a thin JS-shell page instead of a job description, ask the user to paste the JD text and work from that.
 
 ### Identify framing gaps
 
-Compare the submitted resume's language against the Framing rules section of corpus/cheat-sheet.md. Prep docs use soft framing: lead with the situation, not the credential. If the resume states something more bluntly than the user would say it aloud, note the gap for the Resume vs. Talking Points section and the report.
+Compare the submitted resume's language against the Framing rules section of corpus/cheat-sheet.md. If no tailored resume exists in applied/, use the base variant in templates/ closest to this role's lane instead. Prep docs use soft framing: lead with the situation, not the credential. If the resume states something more bluntly than the user would say it aloud, note the gap for the Resume vs. Talking Points section and the report.
 
 ## Step 2: Research the company
 
@@ -87,9 +89,12 @@ Run these searches in parallel where possible.
 
 ## Step 3: Build the prep doc
 
-Create `interview-prep/{company}-recruiter-prep.md` (or `{company}-{interviewer-name}-prep.md` for non-recruiter rounds).
+Using the round type from Step 0: create `interview-prep/{company}-recruiter-prep.md` for a recruiter screen, or `interview-prep/{company}-{interviewer-name}-prep.md` (or another `{company}-{context}-prep.md` naming the round) for non-recruiter rounds.
 
-**Never overwrite an existing prep doc.** If the target filename already exists, this is a later round: create a new file with a context suffix that names the round (e.g. `{company}-{interviewer-name}-prep.md`, `{company}-panel-prep.md`, `{company}-round-2-prep.md`). Only append sections to an existing doc when the user explicitly asks for an update to the same round.
+**Never overwrite or rewrite existing prep content.** If a prep doc for this round already exists, ask with AskUserQuestion which case this is:
+
+- **Refreshing the same upcoming round** (new intel, rescheduled call): update the SAME doc by ADDING a clearly dated addendum section (e.g. `## Addendum {date}`) carrying what changed. Leave the existing content untouched.
+- **Genuinely a new round**: create a new file with a suffix naming the round (e.g. `{company}-{interviewer-name}-prep.md`, `{company}-panel-prep.md`, `{company}-round-2-prep.md`).
 
 ### Required sections
 
@@ -105,7 +110,7 @@ Create `interview-prep/{company}-recruiter-prep.md` (or `{company}-{interviewer-
    - Questions they'll likely ask + suggested answers. Weight the question list by the frequencies in corpus/question-trends.md, then adjust for this company's specific signals. Shape each suggested answer on the canonical spine from corpus/answer-bundles.md: principle -> what I've done -> what I'd do now -> stop line
    - Questions the user should ask (5-6, showing homework)
 8. **Potential Landmines** -- tough questions and how to handle them
-9. **Resume vs. Talking Points** -- table mapping submitted resume language to conversational framing. Required for every prep doc.
+9. **Resume vs. Talking Points** -- table mapping submitted resume language to conversational framing. Required for every prep doc. If no tailored resume exists in applied/, map the user's base variant instead (the templates/resume-*.md closest to this role's lane) against the role's demands, and note in the section that no tailored resume was submitted. (No further fallback needed: if the variants are still example content, the preflight guard already stopped the run.)
 10. **Prior Round Intel** (if applicable) -- summary of what was learned in previous interviews. Corrected facts, open threads, relationships
 11. **Research Gaps** -- what we couldn't find, things to ask on the call
 
@@ -125,9 +130,9 @@ When building prep for round 2+:
 - Draw positioning language from the corpus (answer-bundles.md, cheat-sheet.md) first, not ad hoc phrasing.
 - Apply profile/voice.md to anything the user will say out loud or send.
 
-### Domain positioning modules
+### Domain positioning angles
 
-The cheat sheet may carry positioning modules: pre-agreed angles for specific company archetypes (a story bank entry or framing rule tagged with when to use it). When the company's signals match one -- for example, a "founder-led, process-averse" module for companies skeptical of the user's function, positioning the function as operating leverage rather than gatekeeping -- thread that angle through **Why This Is a Strong Fit**, **Interview Strategy**, and **Potential Landmines**, keeping whatever nuance the module specifies. Don't invent a module that isn't in the cheat sheet.
+Pre-agreed positioning angles live in two places in corpus/cheat-sheet.md: the Framing rules section (a rule for a company archetype) and the Stories bank (a story whose "Use when:" line fits this company's situation). When the company's signals match one -- for example, a founder-led, process-averse company skeptical of the user's function, where the agreed framing positions the function as operating leverage rather than gatekeeping -- thread that angle through **Why This Is a Strong Fit**, **Interview Strategy**, and **Potential Landmines**, keeping whatever nuance the cheat sheet specifies. Don't invent an angle that isn't in the cheat sheet.
 
 ## Step 4: Update the tracker
 
@@ -137,9 +142,11 @@ tracker.csv is the single log; a prep session is a touch. Columns, in order:
 Company,Role,Source,Fit Score,Fit Lane,Status,Date Added,Date Applied,Last Touch,Touch Type,Response,Response Date,Notes
 ```
 
-Get today's date with `date +%Y-%m-%d`. Pick the target status from the round type Step 0 already established -- don't ask the user again: a recruiter screen means Status=Screen; a hiring-manager, panel, or any later round means Status=Interviewing. Match on Company (case-insensitive; if multiple roles are tracked for this company, match the role this interview is for):
+Get today's date with `date +%Y-%m-%d`. Pick the target status from the round type Step 0 classified -- don't ask the user again: a recruiter/talent screen means Status=Screen; a hiring-manager, panel, or any later round means Status=Interviewing. Match rows on Company (case-insensitive):
 
-- **If a row exists**: set Last Touch=today, Touch Type=prep, and Status to the target status -- but never regress a later stage. If the row's Status is already further along than the target (e.g. already Interviewing or Offer when prepping another screen), leave Status as it is. Keep every other field.
+- **If exactly one row exists for this company**: that's the row.
+- **If multiple rows exist (several roles tracked for this company)**: match by Role using the JD and round context. If it's still ambiguous which role this interview is for, ask the user which row it belongs to -- never silently update an arbitrary row.
+- **On the matched row**: set Last Touch=today, Touch Type=prep, and Status to the target status -- but never regress a later stage. If the row's Status is already further along than the target (e.g. already Interviewing or Offer when prepping another screen), leave Status as it is. Keep every other field.
 - **If no row exists**: append one -- Company and Role from what you know, Source=direct, Status=the target status, Date Added=today, Last Touch=today, Touch Type=prep, other fields empty. Flag to the user that this company wasn't tracked yet.
 
 CSV rules: quote any field containing a comma; escape embedded double-quotes by doubling them (RFC 4180). Keep the header row intact and don't disturb other rows.

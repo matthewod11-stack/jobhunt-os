@@ -42,7 +42,7 @@ If the URL fails, ask the user to paste the job description directly and work fr
 
 List the available variants: `ls templates/resume-*.md`. If the glob matches nothing, stop and tell the user to run /setup first; there is nothing to tailor.
 
-Read the first 10 lines of each variant (the header and summary reveal the lane's point of view). Based on the role's core mandate, recommend one variant with 1-2 sentences of reasoning, then confirm with AskUserQuestion, offering each variant as an option so the user can override.
+Read the first 10 lines of each variant (the header and summary reveal the lane's point of view). If every variant's first line begins with the example-content marker prefix `<!-- Example output`, stop here and tell the user to run /setup first — no need to ask them to pick a variant that is about to be rejected by the Step 3 guard. Otherwise, based on the role's core mandate, recommend one variant with 1-2 sentences of reasoning, then confirm with AskUserQuestion, offering each variant as an option so the user can override.
 
 ## Step 3: Read the selected variant
 

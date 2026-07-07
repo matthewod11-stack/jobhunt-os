@@ -13,7 +13,7 @@ All paths are relative to the workspace root (the directory containing CLAUDE.md
 
 Unlike /prep and /apply, the debrief itself does not depend on the corpus being real -- the primary artifact is the debrief doc, built from what actually happened on the call. So this command never hard-stops on example content. But the corpus write-back step (Step 5) does depend on it: appending a real lesson to fictional example content would pollute it and get replaced by /setup anyway.
 
-Check now so you can say so up front: if the first line of corpus/cheat-sheet.md begins with the example-content marker prefix `<!-- Example output` (match on this prefix only, not the full literal string, since the dash character in the marker can vary), it is still the fictional Jordan Reyes example. Same check for corpus/answer-bundles.md. If either trips, proceed with the full debrief but skip the write-back to that file in Step 5, with a note that running /setup first is what makes the corpus loop work.
+Check now so you can say so up front: if corpus/cheat-sheet.md is missing or empty, or its first line begins with the example-content marker prefix `<!-- Example output` (match on this prefix only, not the full literal string, since the dash character in the marker can vary), the corpus is not the user's real content yet -- either never seeded or still the fictional Jordan Reyes example. Same check for corpus/answer-bundles.md. If either trips, proceed with the full debrief but skip the write-back to that file in Step 5, with a note that running /setup first is what makes the corpus loop work.
 
 Exception: corpus/question-trends.md is REAL shared seed data (anonymized interviewer-question frequencies), not persona content. It does not carry the example marker and must never be treated as example content.
 
@@ -26,19 +26,30 @@ Exception: corpus/question-trends.md is REAL shared seed data (anonymized interv
 
 If `$ARGUMENTS` is empty, ask the user for at least the company before doing anything else. If only a company is given, infer the round from the docs (a prep doc for this company with no matching debrief yet usually identifies the call), and confirm with the user if more than one candidate fits.
 
-## Step 1: Get the source material
+## Step 1: Gather prior context
 
-Most people don't have clean transcripts as the interviewee. The debrief always includes a guided Q&A conversation, whether or not a transcript is available. The prep doc provides the scaffolding -- you know what was planned, so you ask what actually happened.
+1. Read all existing prep and debrief docs for this company from interview-prep/
+2. If several prep docs exist for this company, match the round identifier from Step 0 against the prep-doc filenames and the round each one was built for, and pick THE prep doc for this debrief -- that's the scaffolding for Step 2. Still skim the others for context. If no single doc matches cleanly, ask the user which one covers this call.
+3. If no prep doc exists for this round -- interview-prep/ ships empty, so this is the normal first-run state, and plenty of calls happen unprepped -- say so in one sentence and proceed. Step 2 falls back to the universal questions, and the debrief is built entirely from what the user reports.
+4. Read the submitted resume for this company from applied/, if one exists
+5. Read this company's row in tracker.csv (role, fit lane, status, dates, notes)
+6. Note what the pre-call prep predicted, so Step 3 can compare it to what actually happened
 
-First, gather prior context (Step 2 below) so you have the prep doc loaded. Then ask the user for input:
+## Step 2: Get the source material
+
+Most people don't have clean transcripts as the interviewee. The debrief always includes a guided Q&A conversation, whether or not a transcript is available. The prep doc (loaded in Step 1) provides the scaffolding -- you know what was planned, so you ask what actually happened.
+
+Ask the user for input:
 
 1. **Ask for source material first.** Transcript file path, pasted text, or "just ask me." Accept whatever the user provides.
-2. **If a transcript is provided**, read it and extract what you can. Then proceed to the guided questions below to fill gaps, clarify speaker attribution, and get the user's subjective reads (chemistry, what landed, gut feel) that no transcript captures.
+2. **If a transcript is provided**, read it and extract what you can. If a transcript file path doesn't resolve or the file can't be read, say so in one sentence and ask the user to paste the text directly -- or fall back to guided-only mode; never guess at what a transcript you couldn't read might have said. Then proceed to the guided questions below to fill gaps, clarify speaker attribution, and get the user's subjective reads (chemistry, what landed, gut feel) that no transcript captures.
 3. **If no transcript**, go straight to guided questions.
 
 ### Guided debrief questions (always run, even with a transcript)
 
-Read the prep doc first, then ask these in 1-2 rounds (not all at once -- pick the 4-6 most relevant). If you already have a transcript, skip questions you can confidently answer from it and focus on gaps + subjective reads.
+Ask these in 1-2 rounds (not all at once -- pick the 4-6 most relevant). If you already have a transcript, skip questions you can confidently answer from it and focus on gaps + subjective reads.
+
+If there is no prep doc for this round (per Step 1), say so and proceed with the universal questions only: all of Round 1 plus the last two Round 2 questions. The bracketed [If prep flagged X] conditionals simply don't apply.
 
 **Round 1 (big picture):**
 
@@ -62,7 +73,9 @@ Read the prep doc first, then ask these in 1-2 rounds (not all at once -- pick t
 - [If names are garbled] Just to confirm: the transcript's "Jane Riviera" is Jane Rivera, and "Acme Labs" is Acme AI? (verify against known names from the prep doc, tracker, and prior debriefs)
 - The transcript shows [X] -- is that what actually happened, or is the transcription off?
 
-After the user's answers, if there are obvious gaps in the debrief sections (new intel, what landed, risk), ask 1-2 targeted follow-ups. Then proceed to building the doc.
+These three don't count against the 4-6 pick -- a transcript answers several of the standard questions, so these replace what you'd otherwise have asked. Total questions put to the user should still land in the 4-8 range.
+
+After the user's answers, if there are obvious gaps in the debrief sections (new intel, what landed, risk), ask 1-2 targeted follow-ups. Terse answers or "skip" are fine -- proceed with what you have; a debrief built from three answers beats no debrief. Then build the doc.
 
 ### Transcript quality notes
 
@@ -74,13 +87,6 @@ Auto-transcripts (Otter, Grain, etc.) from calls the user doesn't control will t
 - Filler and false starts mixed with real content
 
 Use the guided Q&A answers as the authoritative source. Use the transcript to fill in details the user may have forgotten (exact phrasing, topics covered, sequence of conversation). Flag low-confidence reconstructions in the debrief rather than guessing.
-
-## Step 2: Gather prior context
-
-1. Read all existing prep and debrief docs for this company from interview-prep/
-2. Read the submitted resume for this company from applied/, if one exists
-3. Read this company's row in tracker.csv (role, fit lane, status, dates, notes)
-4. Note what the pre-call prep predicted vs. what actually happened
 
 ## Step 3: Build the debrief doc
 
@@ -101,6 +107,8 @@ Use a table where possible. Compare pre-call research to what was actually said:
 
 | Topic | Pre-call estimate | Actual (from call) |
 |-------|------------------|-------------------|
+
+If there was no prep doc, there is no pre-call estimate: write "no prep doc" in that column, or drop it and just list what was learned.
 
 Cover:
 
@@ -156,7 +164,7 @@ Get today's date with `date +%Y-%m-%d`. Pick the target status from what the deb
 
 - **Terminal outcome revealed on or after the call** (rejection, declined offer, withdrawal, role frozen/closed): Status=Rejected, Withdrawn, or Closed as appropriate; Response=a short phrase (e.g. "rejected after screen"); Response Date=the date it happened (today if that's when the user learned it). Terminal statuses always apply -- ending a process is an outcome, not a regression.
 - **Offer extended:** Status=Offer.
-- **Process still alive:** a recruiter/talent screen debrief means Status=Screen; a hiring-manager, panel, or any later round means Status=Interviewing -- but never regress a later stage. If the row's Status is already further along than the target (e.g. already Interviewing when debriefing a screen that happened out of order), leave Status as it is.
+- **Process still alive:** classify the round the same way /prep's Step 0 does -- by what the round IS, not who was in it -- using the prep doc picked in Step 1 and the tracker row's current Status as signals, and asking the user only if it's still unclear. A recruiter/talent screen debrief means Status=Screen; a hiring-manager, panel, or any later round means Status=Interviewing -- but never regress a later stage. If the row's Status is already further along than the target (e.g. already Interviewing when debriefing a screen that happened out of order), leave Status as it is.
 
 Match rows on Company (case-insensitive):
 

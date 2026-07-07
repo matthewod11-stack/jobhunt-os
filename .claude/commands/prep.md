@@ -137,10 +137,10 @@ tracker.csv is the single log; a prep session is a touch. Columns, in order:
 Company,Role,Source,Fit Score,Fit Lane,Status,Date Added,Date Applied,Last Touch,Touch Type,Response,Response Date,Notes
 ```
 
-Get today's date with `date +%Y-%m-%d`. Match on Company (case-insensitive; if multiple roles are tracked for this company, match the role this interview is for):
+Get today's date with `date +%Y-%m-%d`. Pick the target status from the round type Step 0 already established -- don't ask the user again: a recruiter screen means Status=Screen; a hiring-manager, panel, or any later round means Status=Interviewing. Match on Company (case-insensitive; if multiple roles are tracked for this company, match the role this interview is for):
 
-- **If a row exists**: set Last Touch=today, Touch Type=prep, and Status=Interviewing (unless Status already reflects a later stage, e.g. Offer). Keep every other field.
-- **If no row exists**: append one -- Company and Role from what you know, Source=direct, Status=Interviewing, Date Added=today, Last Touch=today, Touch Type=prep, other fields empty. Flag to the user that this company wasn't tracked yet.
+- **If a row exists**: set Last Touch=today, Touch Type=prep, and Status to the target status -- but never regress a later stage. If the row's Status is already further along than the target (e.g. already Interviewing or Offer when prepping another screen), leave Status as it is. Keep every other field.
+- **If no row exists**: append one -- Company and Role from what you know, Source=direct, Status=the target status, Date Added=today, Last Touch=today, Touch Type=prep, other fields empty. Flag to the user that this company wasn't tracked yet.
 
 CSV rules: quote any field containing a comma; escape embedded double-quotes by doubling them (RFC 4180). Keep the header row intact and don't disturb other rows.
 

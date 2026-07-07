@@ -24,32 +24,35 @@ Exception: corpus/question-trends.md is REAL shared seed data (anonymized interv
 `$ARGUMENTS` is `{company} [outcome]`. Extract:
 
 - **Company name** (required) -- may be multi-word. If the split between company and outcome is ambiguous ("Iron Peak rejected" is clear, but a multi-word remainder may not be), check the candidate splits against tracker.csv Company values and interview-prep/ + applied/ filenames first and take the split that lines up with a known company. If still ambiguous, ask the user rather than guessing.
-- **Outcome** (optional) -- what comes after the company: "rejected", "declined-offer", "withdrew", "role-closed", or similar. If omitted, infer it from the tracker row's Status (Rejected, Withdrawn, or Closed already says most of it) or from the latest debrief's terminal note, and confirm the inference with the user before writing anything -- the outcome shapes the whole doc.
+- **Outcome** (optional) -- what comes after the company: "rejected", "declined-offer", "withdrew", "role-closed", or similar. If omitted, infer it from the tracker row's Status (Rejected, Withdrawn, or Closed already says most of it) or from the latest debrief -- its RISK ASSESSMENT and OPEN QUESTIONS sections, and the tracker Status that debrief set -- and confirm the inference with the user before writing anything. The outcome shapes the whole doc, and once confirmed here it is settled: later steps build on it rather than asking again.
 
 If `$ARGUMENTS` is empty, ask the user for at least the company before doing anything else.
 
 ## Step 1: Gather the full arc
 
-Read everything on file for this company:
+**Scope to one role first.** Check tracker.csv for this company's rows before reading any docs. If multiple rows exist (several roles tracked for this company), ask the user which role's process this recap is for, and scope the whole arc to that process. Prep and debrief filenames don't encode the role, so attribute each doc to the chosen process by its dates and content -- and flag any doc you can't attribute confidently rather than folding it into the arc. Step 4's tracker update reuses this choice instead of re-asking.
+
+Then read everything on file for this process:
 
 - Every prep doc and every `{company}-post-call-*` debrief in interview-prep/, plus any outreach notes and saved JDs there -- these are the raw material; the recap aggregates and zooms out from them.
 - The tailored resume and any cover letter in applied/.
-- This company's row in tracker.csv (role, fit lane, status, dates, notes).
-- Any rejection/decline email text the user pastes.
+- The tracker.csv row identified above (role, fit lane, status, dates, notes).
 - Relevant memory files (e.g. `feedback_hiring_signal_calibration`) and any corpus promotions made during the process (bullets in corpus/cheat-sheet.md tagged `[promoted from {company}-...]`).
 
 Don't re-interview the user round-by-round -- the debriefs already hold that.
 
-**If little or nothing is on file** -- no prep docs, no debriefs, maybe not even a tracker row (the user never ran the other commands) -- the recap still works: build the arc from the tracker.csv row plus whatever exists, lean a little harder on Step 2's questions (they may need to cover the rough timeline as well as the outcome, but keep the count discipline), and say explicitly in the doc which rounds have no written record.
+**If little or nothing is on file** -- no prep docs, no debriefs, maybe not even a tracker row (the user never ran the other commands) -- the recap still works: build the arc from the tracker.csv row plus whatever exists, lean a little harder on Step 2's questions (they may need to cover the rough timeline too, but keep the count discipline), and say explicitly in the doc which rounds have no written record.
 
 ## Step 2: Confirm only what the docs don't capture
 
-Ask the user 2-4 targeted things, no more:
+The outcome itself was already confirmed in Step 0 -- do NOT re-ask it here. Ask the user 2-4 targeted things, no more, covering only what Step 0 and the docs didn't get:
 
-- Final outcome + how they're reading it (and the exact rejection/decline language, if any).
+- How they're reading the outcome, and the exact rejection/decline language if any (pasting the email text is welcome -- it's source material for the doc).
 - Their single biggest takeaway from the process.
 - Which relationships are worth keeping warm.
 - Anything that changed their read since the last debrief.
+
+Drop any question the docs on file (or Step 0) already answered. Four is the cap; when the record is rich, the right count is two or fewer.
 
 ## Step 3: Build the recap doc
 
@@ -101,7 +104,7 @@ Company,Role,Source,Fit Score,Fit Lane,Status,Date Added,Date Applied,Last Touch
 Get today's date with `date +%Y-%m-%d`. Match rows on Company (case-insensitive):
 
 - **If exactly one row exists for this company**: that's the row.
-- **If multiple rows exist (several roles tracked for this company)**: match by Role using the prep docs and recap context. If it's still ambiguous which role this process was, ask the user which row it belongs to -- never silently update an arbitrary row.
+- **If multiple rows exist (several roles tracked for this company)**: use the role the user chose in Step 1 -- don't re-ask. If Step 1 somehow left it unsettled, ask now; never silently update an arbitrary row.
 - **On the matched row**: set Status per the outcome -- rejection means Rejected; the user declined the offer or withdrew means Withdrawn; role frozen/closed or gone-quiet-and-closed means Closed. Set Response=a short phrase (e.g. "rejected after onsite"), Response Date=the date the outcome landed (today if that's when the user learned it), Last Touch=today, Touch Type=recap, and add the one-line outcome + lesson to Notes. Keep every other field. Terminal statuses always apply -- ending a process is an outcome, not a regression.
 - **If no row exists**: append one -- Company and Role from what you know, Source=direct, the terminal Status, Date Added=today, Last Touch=today, Touch Type=recap, Response and Response Date per above, Notes=the one-line outcome. Flag to the user that this company wasn't tracked yet.
 
@@ -116,4 +119,4 @@ CSV rules: quote any field containing a comma; escape embedded double-quotes by 
 
 ---
 
-**Filename convention:** `{company}-recap.md` -- one per process, in interview-prep/. If the workspace still carries the example persona's docs, the Solara recap at `interview-prep/solara-recap.md` shows what a finished one looks like.
+**Filename convention:** `{company}-recap.md` -- one per process, in interview-prep/. If the workspace still carries the example persona's interview docs, `interview-prep/solara-recap.md` shows a finished recap; if it is not present, skip this -- nothing in this command depends on that file existing.

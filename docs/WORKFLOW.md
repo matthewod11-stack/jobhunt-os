@@ -1,7 +1,7 @@
 <!-- DRAFT - pending Matt's review before launch -->
 # Where this came from
 
-I'm Matt. This workspace is the cleaned-up version of a system I built while running my own job search, which started in April 2026 and ended in early July when I signed an offer at the company. I work in People/HR, mostly at technical, founder-led companies. Over roughly three months I ran eighteen processes end to end: a hardware startup, an AI-music company, a cloud-infrastructure startup, a frontier-AI lab, a legal-tech company, several early-stage AI startups. Most of them ended in rejection. The system exists because of what those rejections taught me.
+I'm Matt. This workspace is the cleaned-up version of a system I built while running my own job search, which started in April 2026 and ended in early July when I signed an offer at an AI product company. I work in People/HR, mostly at technical, founder-led companies. Over roughly three months I ran eighteen processes end to end: a hardware startup, an AI-music company, a cloud-infrastructure startup, a frontier-AI lab, a legal-tech company, several early-stage AI startups. Most of them ended in rejection. The system exists because of what those rejections taught me.
 
 ## It got built backwards
 
@@ -29,7 +29,7 @@ Some gaps were real. A few roles wanted depth I genuinely didn't have, and the r
 
 ## The outcome, with caveats
 
-the company was the first process where the role shape, the team's expectations, and my actual spike all pointed the same direction. Role shape mattered more than title: the right mandate under a modest title beats the wrong one under an impressive one. I signed in July 2026.
+The company I signed with was the first process where the role shape, the team's expectations, and my actual spike all pointed the same direction. Role shape mattered more than title: the right mandate under a modest title beats the wrong one under an impressive one. I signed in July 2026 and start on July 20.
 
 The caveats, plainly. The system did not get me the offer; it made me a better-calibrated candidate across eighteen chances, and one of them converged. Cloning this repo gives you the machinery, not the results. The tuning is the work: your debriefs have to be honest, your corpus entries have to be in your own voice, and you have to keep feeding it after the interviews that go badly, which is exactly when you won't want to. What I'd do differently: start /scout in week one instead of month two, and treat every warm process as unconverted until the offer call.
 

@@ -1,4 +1,3 @@
-<!-- DRAFT - pending Matt's review before launch -->
 # Where this came from
 
 I'm Matt. This workspace is the cleaned-up version of a system I built while running my own job search, which started in April 2026 and ended in early July when I signed an offer at an AI product company. I work in People/HR, mostly at technical, founder-led companies. Over roughly three months I ran eighteen processes end to end: a hardware startup, an AI-music company, a cloud-infrastructure startup, a frontier-AI lab, a legal-tech company, several early-stage AI startups. Most of them ended in rejection. The system exists because of what those rejections taught me.

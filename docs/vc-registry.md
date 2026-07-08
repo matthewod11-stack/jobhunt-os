@@ -4,11 +4,11 @@ This is the list of VC firms `/scout` walks for portfolio companies, tiered by f
 
 | Firm | Tier | Portfolio URL | Blog/News URL | Focus |
 |------|------|---------------|----------------|-------|
-| Andreessen Horowitz | 1 | https://a16z.com/portfolio/ | https://a16z.com/blog/ | AI, crypto, bio, enterprise, infrastructure, fintech, games |
+| Andreessen Horowitz | 1 | https://a16z.com/portfolio/ | https://a16z.com/blog/ | AI, crypto, bio, enterprise, infrastructure, fintech, games (page may need refresh - PRs welcome) |
 | Sequoia Capital | 1 | https://www.sequoiacap.com/our-companies/ | https://www.sequoiacap.com/articles/ | AI, enterprise, fintech, healthcare, consumer |
-| Kleiner Perkins | 1 | https://www.kleinerperkins.com/portfolio | https://www.kleinerperkins.com/perspectives | AI, enterprise, climate, healthcare, fintech |
+| Kleiner Perkins | 1 | https://www.kleinerperkins.com/partnerships/ | https://www.kleinerperkins.com/perspectives | AI, enterprise, climate, healthcare, fintech |
 | Lightspeed Venture Partners | 1 | https://lsvp.com/portfolio/ | https://lsvp.com/insights/ | AI, enterprise, fintech, consumer, healthcare |
-| Accel | 1 | https://www.accel.com/portfolio | https://www.accel.com/noteworthy | AI, enterprise, fintech, security, infrastructure |
+| Accel | 1 | https://www.accel.com/companies | https://www.accel.com/noteworthy | AI, enterprise, fintech, security, infrastructure |
 | Greylock Partners | 2 | https://greylock.com/portfolio/ | https://greylock.com/greymatter/ | AI, enterprise, consumer, infrastructure |
 | Benchmark | 2 | https://www.benchmark.com/ | - | enterprise, consumer, marketplace, infrastructure |
 | Founders Fund | 2 | https://foundersfund.com/portfolio/ | - | AI, defense, aerospace, biotech, infrastructure |

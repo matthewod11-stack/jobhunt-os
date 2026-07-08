@@ -38,7 +38,7 @@ If `$ARGUMENTS` is empty, ask the user for at least the company name before doin
 ### Check what we already have
 
 1. Search applied/ for an existing tailored resume for this company
-2. Search interview-prep/ for any existing prep docs, debriefs, recaps, outreach notes, or saved JDs for this company
+2. Search interview-prep/ for any existing prep docs, debriefs, recaps, outreach notes, or saved JDs for this company -- including `interview-prep/{company}-jd.md`, which /apply saves when a JD arrives as a paste; read it if present
 3. Search tracker.csv for this company's row (role title, fit lane, status, dates, notes)
 4. If a tailored resume exists, read it -- this is what the company has seen
 
@@ -65,7 +65,7 @@ Read these files for framing, fit-point material, and proven answer language:
 
 ### If a JD URL was provided
 
-Fetch the URL and extract the full job description. Save it to `interview-prep/{company}-jd.md` for reference. If that file already exists from an earlier round, never overwrite it: append the new JD under a dated heading, or save it as `interview-prep/{company}-jd-{round}.md`. If the fetch fails or returns a thin JS-shell page instead of a job description, ask the user to paste the JD text and work from that.
+Fetch the URL and extract the full job description. Save it to `interview-prep/{company}-jd.md` for reference. Company names become lowercase slugs in interview-prep/ filenames (Siro -> siro-recruiter-prep.md); this applies here and to every filename this command writes. If that file already exists from an earlier round, never overwrite it: append the new JD under a dated heading, or save it as `interview-prep/{company}-jd-{round}.md`. If the fetch fails or returns a thin JS-shell page instead of a job description, ask the user to paste the JD text and work from that.
 
 ### Identify framing gaps
 
@@ -83,7 +83,7 @@ Use web search to gather:
 6. **The role** -- use the JD if provided, otherwise find the job posting. Pull responsibilities and requirements
 7. **The interviewer** -- search LinkedIn/web for the specific person the user is meeting. Role, background, tenure at the company
 
-Run these searches in parallel where possible.
+Run these searches in parallel where possible. Budget: 8 searches or fetches max for a prep doc; skip-what-you-have (below) covers the rest.
 
 **Skip research you already have from prior rounds.** If a previous prep doc already has the company profile, funding, and products, don't re-research -- just verify nothing major has changed since the last prep.
 

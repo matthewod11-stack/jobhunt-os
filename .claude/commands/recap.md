@@ -37,7 +37,7 @@ Then read everything on file for this process:
 - Every prep doc and every `{company}-post-call-*` debrief in interview-prep/, plus any outreach notes and saved JDs there -- these are the raw material; the recap aggregates and zooms out from them.
 - The tailored resume and any cover letter in applied/.
 - The tracker.csv row identified above (role, fit lane, status, dates, notes).
-- Relevant memory files (e.g. `feedback_hiring_signal_calibration`) and any corpus promotions made during the process (bullets in corpus/cheat-sheet.md tagged `[promoted from {company}-...]`).
+- Relevant memory files (e.g. `feedback_hiring_signal_calibration`) from the project's Claude Code auto-memory directory, and any corpus promotions made during the process (bullets in corpus/cheat-sheet.md tagged `[promoted from {company}-...]`).
 
 Don't re-interview the user round-by-round -- the debriefs already hold that.
 
@@ -65,7 +65,7 @@ Create `interview-prep/{company}-recap.md` using this fixed structure -- honest 
 5. **What went well (keep doing)** -- frames, stories, questions, prep moves that landed. Reusable next time.
 6. **What to improve (-> corpus/memory)** -- and actually promote the durable lessons (calibration misses, recurring risks) in Step 4; note here what was promoted.
 7. **Relationships to keep warm** -- name the highest-value one explicitly (a champion, a well-connected recruiter or investor). Note thank-you / feedback follow-ups.
-8. **Assets produced** -- link the prep docs, debriefs, saved JDs, the tailored resume, and any cheat-sheet/answer-bundle promotions that outlive this process. Use plain relative markdown links (e.g. `[screen debrief](acme-post-call-1.md)`).
+8. **Assets produced** -- link the prep docs, debriefs, saved JDs, the tailored resume, and any cheat-sheet/answer-bundle promotions that outlive this process. Use plain relative markdown links (e.g. `[screen debrief](acme-post-call-1.md)`); files in applied/ are linked as `../applied/...` with spaces URL-encoded as %20 (e.g. `[resume](../applied/Jordan%20Reyes%20Acme%20Resume.pdf)`).
 9. **Open threads** -- pending feedback asks, follow-ups, and the net "second-guess or respect the base rate?" call.
 
 Close the doc with a one-line **template reminder** so the structure stays consistent across processes.
@@ -81,7 +81,7 @@ Three write-backs, each with its own rules:
 
 ### Memory promotion
 
-Promote any durable lesson to a `feedback_*` memory file in Claude Code's memory -- guidance framed as **Why** + **How to apply**, not a diary entry. Calibration misses especially (the gut read said one thing, the outcome said another). Memory holds the user's own accumulated guidance, so the example-content gate does not apply here.
+Promote any durable lesson to a `feedback_*` memory file in the project's Claude Code auto-memory directory -- guidance framed as **Why** + **How to apply**, not a diary entry. Calibration misses especially (the gut read said one thing, the outcome said another). If no memory directory exists for this project, note the promotion in the recap doc's "What to improve" section instead of inventing a path. Memory holds the user's own accumulated guidance, so the example-content gate does not apply here.
 
 ### Corpus promotion (gated)
 
@@ -105,7 +105,7 @@ Get today's date with `date +%Y-%m-%d`. Match rows on Company (case-insensitive)
 
 - **If exactly one row exists for this company**: that's the row.
 - **If multiple rows exist (several roles tracked for this company)**: use the role the user chose in Step 1 -- don't re-ask. If Step 1 somehow left it unsettled, ask now; never silently update an arbitrary row.
-- **On the matched row**: set Status per the outcome -- rejection means Rejected; the user declined the offer or withdrew means Withdrawn; role frozen/closed or gone-quiet-and-closed means Closed. Set Response=a short phrase (e.g. "rejected after onsite"), Response Date=the date the outcome landed (today if that's when the user learned it), Last Touch=today, Touch Type=recap, and add the one-line outcome + lesson to Notes. Keep every other field. Terminal statuses always apply -- ending a process is an outcome, not a regression.
+- **On the matched row**: set Status per the outcome -- rejection means Rejected; the user declined the offer or withdrew means Withdrawn; role frozen/closed or gone-quiet-and-closed means Closed. Set Response=a short phrase (e.g. "rejected after onsite"), Response Date=the date the outcome landed (today if that's when the user learned it), Last Touch=today, Touch Type=recap, and REPLACE Notes with the one-line outcome + lesson (the round-by-round history lives in the prep and debrief docs, not the CSV). Keep every other field. Terminal statuses always apply -- ending a process is an outcome, not a regression.
 - **If no row exists**: append one -- Company and Role from what you know, Source=direct, the terminal Status, Date Added=today, Last Touch=today, Touch Type=recap, Response and Response Date per above, Notes=the one-line outcome. Flag to the user that this company wasn't tracked yet.
 
 CSV rules: quote any field containing a comma; escape embedded double-quotes by doubling them (RFC 4180). Keep the header row intact and don't disturb other rows.

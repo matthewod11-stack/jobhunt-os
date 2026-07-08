@@ -22,7 +22,7 @@ Exception: corpus/question-trends.md is REAL shared seed data (anonymized interv
 `$ARGUMENTS` is `{company} {round}`. Extract:
 
 - **Company name** (required) -- may be multi-word. If the split between company and round is ambiguous ("Iron Peak recruiter" is clear, but "Iron Peak Casey Lee" could be company "Iron Peak" + interviewer "Casey Lee" or something else), check the candidate splits against tracker.csv Company values and interview-prep/ + applied/ filenames first and take the split that lines up with a known company. If still ambiguous, ask the user rather than guessing.
-- **Round identifier** (expected) -- what comes after the company: "recruiter", "round-2", a panel label, or an interviewer name.
+- **Round identifier** (expected) -- what comes after the company: "recruiter", "round-2", a bare round number ("/debrief Acme 1" means round 1), a panel label, or an interviewer name. If the user supplied a round number and it disagrees with the file-derived next N in Step 3, flag the mismatch and ask rather than silently renumbering.
 
 If `$ARGUMENTS` is empty, ask the user for at least the company before doing anything else. If only a company is given, infer the round from the docs (a prep doc for this company with no matching debrief yet usually identifies the call), and confirm with the user if more than one candidate fits.
 
@@ -170,7 +170,7 @@ Match rows on Company (case-insensitive):
 
 - **If exactly one row exists for this company**: that's the row.
 - **If multiple rows exist (several roles tracked for this company)**: match by Role using the prep doc and round context. If it's still ambiguous which role this interview was for, ask the user which row it belongs to -- never silently update an arbitrary row.
-- **On the matched row**: set Last Touch=today, Touch Type=debrief, Status per the rules above, and add a short phrase to Notes with the round result and next step (e.g. "screen done, HM round next week"). Keep every other field.
+- **On the matched row**: set Last Touch=today, Touch Type=debrief, Status per the rules above, and APPEND a short phrase to Notes (semicolon-separated, keeping what is already there) with the round result and next step (e.g. "screen done, HM round next week"). /recap later REPLACES Notes with the final outcome; the round-by-round history lives in the debrief docs, not the CSV. Keep every other field.
 - **If no row exists**: append one -- Company and Role from what you know, Source=direct, Status=the target status, Date Added=today, Last Touch=today, Touch Type=debrief, other fields empty. Flag to the user that this company wasn't tracked yet.
 
 CSV rules: quote any field containing a comma; escape embedded double-quotes by doubling them (RFC 4180). Keep the header row intact and don't disturb other rows.

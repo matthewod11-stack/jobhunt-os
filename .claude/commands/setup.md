@@ -27,7 +27,7 @@ First, read these files to ground yourself in the example content and its shapes
 Then give the user a short (under 150 words) explanation of what /setup will do:
 
 - It interviews them about their resume history, target roles, writing voice, career stories, and search criteria.
-- It REPLACES these example files with their real content: templates/resume-*.md and the built .pdf/.html/.docx artifacts, profile/voice.md, profile/fit-profile.json, corpus/answer-bundles.md, corpus/cheat-sheet.md, and, if present, the example application and interview docs in applied/ and interview-prep/.
+- It REPLACES these example files with their real content: templates/resume-*.md and the committed .pdf artifacts (.html and .docx are gitignored build outputs, regenerated locally), profile/voice.md, profile/fit-profile.json, corpus/answer-bundles.md, corpus/cheat-sheet.md, and, if present, the example application and interview docs in applied/ and interview-prep/.
 - corpus/question-trends.md is KEPT as-is. It is shared seed data (anonymized interviewer-question frequencies), not persona content.
 - Expect 20 to 30 minutes of conversation. They can stop at any phase boundary and resume later.
 
@@ -62,7 +62,7 @@ Write the lane definitions into your working notes for this session and echo the
 
 For each lane, write templates/resume-{lane-slug}.md from the user's real history, reframed for that lane. Study the structure of the existing example variants first and mirror that structure, since templates/resume.css styles it.
 
-Each variant contains, in order: contact header line (name as an H1, then a line with email, LinkedIn, phone, and location separated by " | "); summary paragraph (2-3 sentences, opens with the lane's point of view); `## EXPERIENCE` (roles reverse-chronological, each with a role/company/dates line, a 1-line company-context italic, and 3-6 bullets); `## SELECTED WINS` (2-3 entries, each adding a fact not in the experience bullets); `## SKILLS`; `## EDUCATION`. Insert one `<div style="page-break-before: always;"></div>` at the section boundary nearest the page-1/page-2 break (in the example variants, immediately before `## SELECTED WINS`).
+Each variant contains, in order: contact header line (name as an H1, then a line with email, LinkedIn, phone, and location separated by " | "); summary paragraph (2-3 sentences, opens with the lane's point of view); `## EXPERIENCE` (roles reverse-chronological, each with a role/company/dates line, a 1-line company-context italic, a short plain-text scope paragraph after the italic stating what the person owned, and 3-6 bullets); `## SELECTED WINS` (2-3 entries, each adding a fact not in the experience bullets); `## SKILLS`; `## EDUCATION`. Insert one `<div style="page-break-before: always;"></div>` at the section boundary nearest the page-1/page-2 break (in the example variants, immediately before `## SELECTED WINS`).
 
 Rules for every variant:
 
@@ -73,7 +73,7 @@ Rules for every variant:
 
 Show each variant to the user and revise until they approve it. Then:
 
-1. Delete the Jordan example variants and all their build artifacts: templates/resume-growth.md, templates/resume-pmm.md, and every matching .pdf, .html, and .docx in templates/. If any are already gone, skip silently.
+1. Delete the Jordan example variants and all their build artifacts: every templates/resume-*.md whose first line begins with the example marker prefix, plus every .pdf, .html, and .docx in templates/ sharing a basename with a deleted .md. If any are already gone, skip silently.
 2. Build each new variant: `./templates/build-resume.sh "templates/resume-{lane-slug}.md"`. If the script fails because pandoc or weasyprint is not installed, show the install hint it prints, tell the user the .md sources are complete and the PDFs can be built after installing, and continue to Phase 5.
 3. Read each generated PDF and check the layout: 2 pages, no heading stranded at the bottom of a page, no single bullet orphaned onto page 3. Fix bad breaks by inserting `<div style="page-break-before: always;"></div>` in the .md at a natural section boundary, then rebuild and re-check.
 
@@ -81,7 +81,7 @@ Show each variant to the user and revise until they approve it. Then:
 
 Ask the user for 2 or 3 writing samples: work emails, internal docs, Slack posts, anything they actually wrote in their own voice. NOT their resume. A resume is already performative and will teach you the wrong voice. Paste or file path, either works.
 
-Check sample quality before extracting: if the samples total under ~150 words, are all in one register (e.g. all formal announcements), or contradict each other stylistically, say so and ask for one more sample from a different context. Thin or uniform input produces miscalibrated voice rules, and every downstream artifact inherits them.
+Check sample quality before extracting. Two or three samples in one register (e.g. all work emails) are fine; the gate is about quality, not register variety. If the samples total under about 150 words, or contradict each other stylistically, say so and ask for one more sample. Thin or contradictory input produces miscalibrated voice rules, and every downstream artifact inherits them.
 
 From the samples, extract:
 
@@ -90,7 +90,9 @@ From the samples, extract:
 - Words they would never use (build their banned list from evidence plus asking them directly)
 - Words they overuse (flag as "ration these" rules)
 
-Read profile/voice.md and overwrite it keeping its existing SHAPE: a "## Voice rules" section of concrete, checkable bullets, then a "## Sample paragraphs" section with 2 paragraphs in the user's voice, each followed by an italic annotation naming which rules it demonstrates. Two of the existing rules are universal, not Jordan's, and must be preserved verbatim: the metrics-density rule and the opening-variety rule. Every other rule gets rewritten from the user's actual samples. For the 2 sample paragraphs, draft them from the user's real stories, show them, and revise until the user says "yes, that sounds like me".
+Read profile/voice.md and overwrite it keeping its existing SHAPE: a "## Voice rules" section of concrete, checkable bullets, then a "## Sample paragraphs" section with 2 paragraphs in the user's voice, each followed by an italic annotation naming which rules it demonstrates. Two of the existing rules are universal, not Jordan's, and must be preserved verbatim: the metrics-density rule (the bullet beginning "Metrics density:") and the opening-variety rule (the bullet beginning "Opening variety:"). Every other rule gets rewritten from the user's actual samples. For the 2 sample paragraphs, draft them from the user's real stories, show them, and revise until the user says "yes, that sounds like me".
+
+After extracting the voice rules, re-check the Phase 4 variants against them (the variants were generated before the rules existed) and fix any violations.
 
 ## Phase 6: Positioning seed
 
@@ -106,7 +108,7 @@ Interview the user for 3 to 5 career stories. Prompt for these shapes (skip any 
 
 For each story, dig until you have: the situation in one or two sentences, what they actually did, the measurable or observable result, and what it proves about how they operate.
 
-Read corpus/answer-bundles.md. Mirror its intro and per-answer structure exactly: the intro explains the spine (a principle, what I've done, what I'd do now, and a stop line), including the teaching that the principle is never announced as a thesis, it is the organizing idea folded into how the story is told, coloring at most the first sentence. Keep that intro (it is methodology, not Jordan content, but rewrite any Jordan-specific sentence). Then write one "## {question}" section per story with the four bold-labeled parts: **Principle:** / **What I've done:** / **What I'd do now:** / **Stop line:**. A good principle is a claim the story proves, not a platitude. A good stop line is one short declarative sentence with a payoff, never a summary. Overwrite the file. Show it to the user and revise.
+Read corpus/answer-bundles.md. Mirror its intro and per-answer structure exactly: the intro explains the spine (a principle, what I've done, what I'd do now, and a stop line), including the teaching that the principle is never announced as a thesis, it is the organizing idea folded into how the story is told, coloring at most the first sentence. Keep that intro (it is methodology, not Jordan content; rewrite any Jordan-specific sentence, if any, though the shipped intro has none). Then write one "## {question}" section per story with the four bold-labeled parts: **Principle:** / **What I've done:** / **What I'd do now:** / **Stop line:**. A good principle is a claim the story proves, not a platitude. A good stop line is one short declarative sentence with a payoff, never a summary. Overwrite the file. Show it to the user and revise.
 
 ### Cheat sheet
 
@@ -158,7 +160,7 @@ If applied/ or interview-prep/ contain files with the example-content marker (fi
 
 If clean slate:
 
-- Delete example files in applied/ and interview-prep/ (anything carrying the example-content marker or Jordan Reyes content). If those directories are empty or absent, note it and move on.
+- Delete example files in applied/ and interview-prep/ by three mechanical criteria: (a) any file whose first line begins with the example marker prefix, (b) any built artifact (.pdf, .html, or .docx) sharing a basename with a file deleted under (a), and (c) any file with "Jordan Reyes" in its filename. If those directories are empty or absent, note it and move on.
 - Clear Jordan's rows from tracker.csv, keeping the header row intact. If the tracker is already header-only, leave it untouched.
 
 If keep: leave them, but remind the user those files are fiction and /scout, /apply, and /prep will ignore or replace them as real work accumulates.

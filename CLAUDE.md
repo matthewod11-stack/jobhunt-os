@@ -42,7 +42,7 @@ Ask which mode at session start if unclear.
 
 ## Conventions
 
-- File naming: tailored resumes go in `applied/` as `{Your Name} {Company} Resume.md` and cover letters as `{Your Name} {Company} Cover Letter.md`; prep docs in `interview-prep/` as `{company}-{context}.md`; debriefs as `{company}-post-call-{N}.md`; recaps as `{company}-recap.md`; outreach notes as `{company}-outreach.md`
+- File naming: tailored resumes go in `applied/` as `{Your Name} {Company} Resume.md` and cover letters as `{Your Name} {Company} Cover Letter.md`; prep docs in `interview-prep/` as `{company}-{context}.md`; debriefs as `{company}-post-call-{N}.md`; recaps as `{company}-recap.md`; outreach notes as `{company}-outreach.md`; company names become lowercase slugs in `interview-prep/` filenames (Siro → `siro-recruiter-prep.md`)
 - Never overwrite prep docs — add sections or create new files for new rounds
 - `tracker.csv` is the single log; every command that acts on a company updates it
 - Example content (the Jordan Reyes persona) carries the header `<!-- Example output — /setup will replace this with yours. -->` — it's there to show what good output looks like (JSON files like fit-profile.json can't carry the comment; /setup replaces them all the same)

@@ -38,11 +38,15 @@ Fetch the URL using WebFetch. Extract:
 
 If the URL fails, ask the user to paste the job description directly and work from that. Treat a soft failure the same way: if the fetch "succeeds" but the extracted content is thin or clearly not a job description (a JS-shell page from Greenhouse, Lever, or LinkedIn is the common case; login walls and dead links too), that counts as a failed fetch. Fall back to the paste rather than analyzing a page skeleton.
 
+Before asking for the paste, if the URL is an ashbyhq.com, greenhouse.io, or lever.co posting, try the host's public posting API once: Ashby via the jobs.ashbyhq.com posting-api job-board endpoint, Greenhouse via boards-api.greenhouse.io, Lever via api.lever.co/v0/postings. One attempt only; if it fails or the posting is not found, fall back to the paste.
+
+When the JD arrives via paste (any path), save it to `interview-prep/{company}-jd.md`, the same file /prep would create, so downstream commands can find it.
+
 ## Step 2: Recommend a resume variant
 
 List the available variants: `ls templates/resume-*.md`. If the glob matches nothing, stop and tell the user to run /setup first; there is nothing to tailor.
 
-Read the first 10 lines of each variant (the header and summary reveal the lane's point of view). If every variant's first line begins with the example-content marker prefix `<!-- Example output`, stop here and tell the user to run /setup first — no need to ask them to pick a variant that is about to be rejected by the Step 3 guard. Otherwise, based on the role's core mandate, recommend one variant with 1-2 sentences of reasoning, then confirm with AskUserQuestion, offering each variant as an option so the user can override.
+Read the first 10 lines of each variant (the header and summary reveal the lane's point of view). If every variant's first line begins with the example-content marker prefix `<!-- Example output`, stop here and tell the user to run /setup first; no need to ask them to pick a variant that is about to be rejected by the Step 3 guard. Otherwise, based on the role's core mandate, recommend one variant with 1-2 sentences of reasoning, then confirm with AskUserQuestion, offering each variant as an option so the user can override.
 
 ## Step 3: Read the selected variant
 
@@ -114,7 +118,7 @@ Save as `applied/{Name} {Company} Cover Letter.md` and build the PDF with the sa
 ./templates/build-resume.sh "applied/{Name} {Company} Cover Letter.md"
 ```
 
-Delete the .html intermediate. Verify the PDF is a single page; trim if not.
+Delete the .html intermediate and keep the .docx, same rationale as the resume (some application portals want a .docx). Verify the PDF is a single page; trim if not.
 
 ## Step 8: Update the tracker
 
@@ -127,6 +131,7 @@ Company,Role,Source,Fit Score,Fit Lane,Status,Date Added,Date Applied,Last Touch
 Get today's date with `date +%Y-%m-%d`. Match existing rows on Company AND Role (both case-insensitive), not company alone. Then:
 
 - **If a row for this company and role already exists**: update it in place. Set Status=Applied, Date Applied=today, Last Touch=today, Touch Type=application. Keep the existing Source, Fit Score, Fit Lane, and Date Added.
+- **If a row matches on Company and its Role field is EMPTY** (a /scout row): treat it as this application's row. Fill in the Role from Step 1 and update it in place as above, preserving Source, Fit Score, Fit Lane, and Date Added.
 - **If the company exists but with a DIFFERENT role**: append a new row for this role rather than overwriting the other one, and flag it to the user ("you already have {Company} tracked for {other role}; adding a second row for {this role}").
 - **If no row exists**: append one. Company and Role from Step 1, Source=applied-direct, Fit Score empty (that's /scout's job), Fit Lane=the lane slug of the variant used, Status=Applied, Date Added=today, Date Applied=today, Last Touch=today, Touch Type=application, Response and Response Date empty, Notes=one short phrase if there's anything worth remembering (else empty).
 

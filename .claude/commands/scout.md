@@ -31,6 +31,8 @@ Web-search recent raises (last 30 days) in the profile's sectors and locations. 
 - "startup raised funding {sector} {location}" for each profile location
 - "recently funded {sector} startups"
 
+Source hardening: if a news source blocks the fetch (403, paywall), skip it and note it in the report; never block the run on one source. Verify each hit's date against the 30-day window before counting it; funding roundups resurface old raises. When a profile location is a remote type (e.g. "Remote (US)"), drop it from the location query template instead of searching the literal string.
+
 From the results, extract per hit: company name, round, amount, lead investors, a one-line description of what they do, and location if stated. Only include companies the sources actually name with funding news; never fabricate or pad from general knowledge. If a sector yields nothing, say so and move on. Zero hits across all queries is a valid (reportable) outcome, not a failure to hide.
 
 ## Step 2: Discover - VC portfolios
@@ -39,7 +41,7 @@ Read the table in docs/vc-registry.md (columns: | Firm | Tier | Portfolio URL | 
 
 Select the firms in the tiers in scope, prioritizing firms whose Focus overlaps the profile's sectors. For each firm, WebFetch the Portfolio URL and extract companies that plausibly match the profile's sectors, with whatever detail the page carries (name, one-liner, sector, stage if shown).
 
-**Skip-and-report, never block:** portfolio pages rot and many are JS-heavy shells that return little text. If a fetch fails or returns thin content, note the firm, optionally try its Blog/News URL as a fallback source of recent investments, and move on to the next firm. Tally every skipped page for the final counts. One bad page must never stall the run.
+**Skip-and-report, never block:** portfolio pages rot and many are JS-heavy shells that return little text. If a fetch fails or returns thin content, note the firm and try its Blog/News URL as a fallback source of recent investments (when the registry lists one) before skipping the firm and moving on. Tally every skipped page for the final counts. One bad page must never stall the run.
 
 The cap applies mid-page, not just between firms: on a large portfolio page, stop extracting the moment combined discoveries reach N; a 500-company page must not blow past the cap in one pass. Once N is reached, stop walking firms and score what you have.
 
@@ -55,6 +57,8 @@ Scraped names come in mangled: a portfolio grid can glue a company's name to an 
 - Also dedupe within the discovered batch itself (the same raise shows up in news AND a portfolio; keep one, remember both sources)
 
 Count everything dropped here for the report.
+
+If dedupe drops the new-company count below N and in-scope sources remain unwalked (tier-scope firms not yet walked, sectors not yet searched), continue discovery to refill toward N, still respecting the cap and the tier scope.
 
 ## Step 4: Score against the fit profile
 
@@ -81,7 +85,7 @@ Headline **Fit Score** = the highest lane score. **Fit Lane** = that lane's key 
 
 ## Step 5: Careers check (top 10)
 
-Take the 10 highest-scoring non-avoid companies. For each, locate and WebFetch the careers page (try the company site's /careers or /jobs path; fall back to a quick web search). Classify every open role against the profile's lanes: tag each with the best-fitting lane key, or `other` when none fits. If the page cannot be found or will not load, mark the company "careers page not found" and keep it in the run; that is a data gap, not a disqualifier.
+Take the 10 highest-scoring non-avoid companies. For each, locate and WebFetch the careers page (try the company site's /careers or /jobs path; fall back to a quick web search). Classify every open role against the profile's lanes: tag each with the best-fitting lane key, or `other` when none fits. If the page cannot be found or will not load, mark the company "careers page not found" and keep it in the run; that is a data gap, not a disqualifier. A careers or ATS page that loads but lists zero roles (Ashby, Greenhouse, and Lever boards render their listings via JavaScript) is classified "careers page unreadable (JS-rendered)", NOT "no open roles"; the company stays a lead and the report says its role status is unknown.
 
 A high-fit company with NO open role is a LEAD, not a dead end -- flag it for /outreach.
 

@@ -43,10 +43,11 @@ brew install pandoc
 pip install weasyprint
 ```
 
-Clone the repo (URL is under the Code button -- the clone becomes your personal workspace, so don't push your filled-in version anywhere public), then start Claude Code inside it:
+Clone the repo and start Claude Code inside it. The clone becomes your personal workspace -- don't push your filled-in version anywhere public.
 
 ```bash
-cd jobhunt-os
+git clone https://github.com/matthewod11-stack/jobhunt-os.git my-job-search
+cd my-job-search
 claude
 ```
 

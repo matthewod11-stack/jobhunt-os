@@ -39,9 +39,10 @@ flowchart LR
 You need [Claude Code](https://claude.com/claude-code), plus two tools for the resume PDF pipeline (macOS one-liners shown; the build script prints Linux equivalents if either is missing):
 
 ```bash
-brew install pandoc
-pip install weasyprint
+brew install pandoc weasyprint
 ```
+
+(On Linux, install both from your package manager; weasyprint needs its native pango/harfbuzz libraries, which pip alone does not provide.)
 
 Clone the repo and start Claude Code inside it. The clone becomes your personal workspace -- don't push your filled-in version anywhere public.
 

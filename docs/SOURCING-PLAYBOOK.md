@@ -4,7 +4,7 @@ This is the methodology behind [`/scout`](../.claude/commands/scout.md). The com
 
 ## 1. The thesis: source companies, not job postings
 
-Job boards are where everyone competes. By the time a role is posted on a board, it has a recruiter, a pipeline, and several hundred applicants who all found it the same way you did. Your resume enters as one row in an ATS, scored by keyword overlap against people who optimized for exactly that.
+Job boards are where everyone competes. By the time a role is posted on a board, it typically has a recruiter, a pipeline, and hundreds of applicants who all found it the same way you did. Your resume enters as one row in an ATS, scored by keyword overlap against people who optimized for exactly that.
 
 The alternative is to find the company before the posting exists -- or without one ever existing. Two facts make this work:
 
@@ -13,7 +13,7 @@ The alternative is to find the company before the posting exists -- or without o
 
 So the unit of discovery is the COMPANY, not the job posting. You are building a list of companies where your specific shape of experience would obviously help, ranked by how obvious that is. Whether they have posted a role yet is a secondary fact about timing, not a filter on whether they belong on the list.
 
-This is a head start, not a guarantee. Most leads go nowhere -- that is fine and expected. The point is that the leads that DO go somewhere came from a channel where you were one of five candidates instead of one of five hundred.
+This is a head start, not a guarantee. Most leads go nowhere -- that is fine and expected. The point is that the leads that DO go somewhere came from a channel where you were one of a handful of candidates instead of one of hundreds.
 
 ## 2. Channels
 
@@ -22,6 +22,12 @@ Scout draws from two channels. They overlap on purpose: a fresh raise often show
 ### Funding news
 
 Search recent raises -- roughly the last 30 days -- in your sectors and locations. Older than that and the post-raise hiring window is already closing; the recruiter has been hired and the pipeline is forming.
+
+The searches themselves are simple templates. Run several, swapping in your own sectors and locations:
+
+- "{sector} startup seed series A funding" plus the current month and year, once per sector
+- "startup raised funding {sector} {location}" for each of your locations
+- "recently funded {sector} startups"
 
 What to extract per hit: company name, round, amount, lead investors, a one-line description of what they do, and location if stated. The round and investors count for more than the amount: a seed round led by a firm you respect says more about the company's next twelve months than the dollar figure does.
 
@@ -68,9 +74,11 @@ This mirrors the corpus principle that runs through the whole workspace: everyth
 
 A high-fit company with NO open role is a LEAD, not a dead end -- flag it for /outreach.
 
-This is the single most counterintuitive rule in the playbook, so here is the math. A posted role means the competition has been invited: hundreds of applicants, keyword screening, a process designed to reject efficiently. No posted role means one of two things -- the need exists but the posting has not caught up (common right after a raise), or the need has not been articulated yet (common at seed, where the founder does not know they need your function until someone shows them). In both cases, a direct note from a high-fit person arrives with effectively zero competition.
+This is the single most counterintuitive rule in the playbook, so here is the arithmetic -- rough on purpose, and illustrative rather than a forecast. A posted role at a funded startup draws hundreds of applicants for perhaps half a dozen first-round conversations: 300 people chasing 6 slots is a 2% shot at a call, before your actual fit ever enters the picture. A direct note to a freshly funded company competes with a handful of other cold notes -- recruiters and fellow cold-emailers read funding announcements too -- not a queue of hundreds. If a founder answers even one in ten pieces of clearly relevant inbound, the well-aimed note runs at several times the posted-role odds, for the cost of one email. Neither number is a promise; the ratio between them is the point.
 
-The worst case for reaching out to a high-fit company with no posting is a polite non-answer. The best case is a role that gets shaped around you. Compare that to the expected value of application number 340 in an ATS queue, and "no open role" starts looking like a feature of a lead rather than a bug.
+Why does the note land at all? No posted role means one of two things -- the need exists but the posting has not caught up (common right after a raise), or the need has not been articulated yet (common at seed, where the founder does not know they need your function until someone shows them). In both cases you are early, not unwanted.
+
+The worst case for reaching out to a high-fit company with no posting is a polite non-answer. The best case is a role that gets shaped around you. Compare that to the expected value of one application among hundreds in an ATS queue, and "no open role" starts looking like a feature of a lead rather than a bug.
 
 Concretely: when a scout run finishes, the report's "No role yet - outreach candidates" section is not the leftovers. For the companies where your fit is a 3, it is often the best section on the page. Run `/outreach {company}` on them.
 

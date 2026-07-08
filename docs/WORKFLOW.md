@@ -1,13 +1,13 @@
 <!-- DRAFT - pending Matt's review before launch -->
 # Where this came from
 
-I'm Matt. This workspace is the cleaned-up version of a system I built while running my own job search, which started in April 2026 and ended in early July when I signed an offer at the company. I work in People/HR, mostly at technical, founder-led companies. Over roughly three months I ran eighteen processes end to end: a hardware startup, an AI-music company, a neocloud, a frontier-AI lab, a legal-tech company, several early-stage AI startups. Most of them ended in rejection. The system exists because of what those rejections taught me.
+I'm Matt. This workspace is the cleaned-up version of a system I built while running my own job search, which started in April 2026 and ended in early July when I signed an offer at the company. I work in People/HR, mostly at technical, founder-led companies. Over roughly three months I ran eighteen processes end to end: a hardware startup, an AI-music company, a cloud-infrastructure startup, a frontier-AI lab, a legal-tech company, several early-stage AI startups. Most of them ended in rejection. The system exists because of what those rejections taught me.
 
 ## It got built backwards
 
 I didn't sit down and design a toolkit. The first pieces were the obvious ones: tailor a resume to a posting, build a prep doc before a call, write down what happened after. That's the ancestry of /apply, /prep, and /debrief, and for the first month that was the whole system.
 
-The sourcing side came later, out of necessity. Job boards produced almost nothing for my profile: by the time a senior People role is posted, it has a recruiter, a pipeline, and two hundred applicants. The processes that actually went somewhere came from funding news and investor portfolios, companies I found before or outside a posting. That reasoning became /scout and the sourcing playbook in this folder.
+The sourcing side came later, out of necessity. Job boards produced almost nothing for my profile: by the time a senior People role is posted, it typically has a recruiter, a pipeline, and hundreds of applicants. The processes that actually went somewhere came from funding news and investor portfolios, companies I found before or outside a posting. That reasoning became /scout and the sourcing playbook in this folder.
 
 /recap came last, when processes started closing and I realized the ending of a search arc held lessons that no single debrief captured. Rejections carry more usable information than advancements do, but only if you extract it before you archive the folder.
 

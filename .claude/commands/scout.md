@@ -21,7 +21,7 @@ From the profile, load: `lanes` (a keyed map, usually 2-3 entries; every user's 
 - `tier X` = scan tiers 1 through X (widening); `tier X-Y` = exactly tiers X through Y; default is tier 1 only
 - Both may appear together in any order ("40 tier 1-2"). Anything you cannot parse: ask rather than guess.
 
-**State the limits before doing any work**, in one line: "This run: up to {N} new companies, tier-{T} VCs. Rough API cost proportional to N." Keep a running count of discoveries against N; stop discovering when you reach the cap, not after; if strong leads remain beyond it, ask before exceeding.
+**State the limits before doing any work**, in one or two lines: "This run: up to {N} new companies, tier-{T} VCs. Tier range is the main cost lever (tier 1 is about 5 portfolio pages, tier 1-3 closer to 19); every run also pays a fixed floor of sector searches plus up to 10 careers fetches, and N mainly caps how many companies get scored and written." Keep a running count of discoveries against N; stop discovering when you reach the cap, not after; if strong leads remain beyond it, ask before exceeding.
 
 ## Step 1: Discover - funding news
 
@@ -41,15 +41,16 @@ Select the firms in the tiers in scope, prioritizing firms whose Focus overlaps 
 
 **Skip-and-report, never block:** portfolio pages rot and many are JS-heavy shells that return little text. If a fetch fails or returns thin content, note the firm, optionally try its Blog/News URL as a fallback source of recent investments, and move on to the next firm. Tally every skipped page for the final counts. One bad page must never stall the run.
 
-Stop walking firms once combined discoveries reach N; score what you have.
+The cap applies mid-page, not just between firms: on a large portfolio page, stop extracting the moment combined discoveries reach N; a 500-company page must not blow past the cap in one pass. Once N is reached, stop walking firms and score what you have.
 
 ## Step 3: Dedupe against the tracker
 
-Read tracker.csv and collect the Company column. Normalize both sides before comparing: lowercase, strip common suffixes (Inc, Inc., LLC, Labs, AI, HQ, Co), collapse whitespace, drop punctuation.
+Read tracker.csv and collect the Company column. Normalize both sides before comparing: lowercase, collapse whitespace, drop punctuation, strip trailing suffixes. Suffixes come in two classes that behave differently: generic legal suffixes (Inc, Inc., LLC, HQ, Co) carry no identity, while meaningful tokens (AI, Labs) can be the whole difference between two companies.
 
-Scraped names come in mangled: a portfolio grid can glue a company's name to an adjacent word (a name concatenated with a word like "music" is a real failure mode). So match generously:
+Scraped names come in mangled: a portfolio grid can glue a company's name to an adjacent word (a name concatenated with a word like "music" is a real failure mode). So match generously, but only drop silently when the match is safe:
 
-- Exact normalized match = duplicate, drop it
+- A raw exact normalized match, or one that becomes exact after stripping only generic legal suffixes = duplicate; drop it
+- A match that only appears after stripping a meaningful token (discovered "Sierra AI" vs a tracked "Sierra") = candidate duplicate; confirm with the user before dropping. Never drop these silently: discarding a real new lead is invisible to the user, which makes it the worst failure this step can have
 - A normalized tracker name appearing as a prefix or substring of a scraped name (or the reverse) = candidate duplicate; confirm ambiguous cases with the user rather than silently dropping or double-adding
 - Also dedupe within the discovered batch itself (the same raise shows up in news AND a portfolio; keep one, remember both sources)
 
@@ -73,6 +74,7 @@ Rules of thumb:
 - Weight what is actually known (round, investors, one-liner, sector, location) heavily; inferred signals are supplementary
 - Stage outside the profile's `stages`, or location incompatible with `locations`, is not an automatic zero (only the avoid list hard-zeros) but pushes scores down and belongs in the assessment
 - Assign a confidence per company: **high** = one-liner, sector, stage, and investors all known; **medium** = at least two of those; **low** = little beyond a name, the score is speculative
+- `comp_floor` shapes confidence and the assessment, never the lane score: when available comp signals (a posted salary range, stage norms for the sector) clearly undercut the floor, say so in the one-sentence assessment and drop confidence a notch; do not zero a lane over inferred pay
 - Write a one-sentence assessment per company: why the top lane fits, or what kills it
 
 Headline **Fit Score** = the highest lane score. **Fit Lane** = that lane's key (empty when the headline is 0).
@@ -106,9 +108,11 @@ CSV rules: quote any field containing a comma; escape embedded double-quotes by 
 
 1. **Top matches with open roles**: company, score + lane, confidence, one-liner, the lane-fit role title (with link if you have one)
 2. **No role yet - outreach candidates**: high-fit companies with no lane-fit opening (including "careers page not found" cases), one per line, each ending "-> /outreach {company}"
-3. **The long tail**: everything else added, one line each (name, score, lane, one-liner)
+3. **The long tail**: everything else added, one line each (name, score, lane, one-liner). Say plainly that role presence is only KNOWN for the top-10 careers-checked companies; a long-tail company with no role listed is unchecked, not role-less
 4. **Excluded by avoid list**: name + the avoid entry it matched
 5. **Counts**: found {X} / duplicates dropped {Y} / added {Z} / pages skipped {W}, naming the firms whose pages failed
+
+If found is 0, or everything deduped away and nothing was added, say so plainly and suggest a concrete next move: widen the tier range ("/scout tier 1-2"), re-run in a week when fresh raises have landed, or revisit fit-profile.json if the sectors are cutting too narrow.
 
 ## Step 7: Correction hook
 

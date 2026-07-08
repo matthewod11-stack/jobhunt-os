@@ -15,6 +15,7 @@ This is where /scout's handoff lands: its report flags high-fit companies with n
 
 Outreach drafted in a fictional persona's voice is worthless, so this command hard-stops on example content (same logic /setup, /apply, and /prep use):
 
+- If profile/voice.md or corpus/cheat-sheet.md is missing or empty, STOP and tell the user to run /setup first; there is no voice or story bank to draft from.
 - If the first line of profile/voice.md begins with the example-content marker prefix `<!-- Example output` (match on this prefix only, not the full literal string, since the dash character in the marker can vary), it is still the fictional Jordan Reyes example. Same check for corpus/cheat-sheet.md.
 - If profile/fit-profile.json still carries the example persona (the `name` field is "Jordan Reyes"), the profile has not been replaced either.
 
@@ -45,14 +46,19 @@ Two hard rules:
 
 - **No fabrication.** The ONE specific thing each draft names must come from an actual research finding or a doc on file. If research turned up nothing concrete, say so and ask the user for a hook rather than inventing one.
 - **Person unfindable.** If the searches cannot identify the named person or their role, say so plainly and draft company-level notes instead. Address a draft to a plausible role (e.g. "founder") only after the user confirms who they are targeting.
+- **Person ambiguous.** If research turns up two or more people with that name at the company, disambiguate by role or title against who the user is trying to reach; if it is still unclear which one they mean, ask the user. Never draft to a guessed identity.
 
 ## Step 3: Pick the format
 
-Ask with AskUserQuestion which format to draft. Default: connection note.
+Ask with AskUserQuestion which format to draft, offering these literal options -- "Connection note" (the default and first option), "InMail / DM", and "Warm follow-up":
 
 - **Connection note** -- LinkedIn's 300-character hard limit on invitation notes. Counted, not estimated (Step 5).
 - **InMail / DM** -- 3-5 sentences, for messaging an existing connection or sending an InMail.
-- **Warm follow-up** -- references the prior touch on record: the tracker row's Last Touch, Touch Type, and Notes, plus any prior section in `{company}-outreach.md`. If the tracker row has no Last Touch and no prior outreach doc exists, there is nothing to follow up on: say so and offer a connection note or DM instead.
+- **Warm follow-up** -- references the prior touch on record: the tracker row's Last Touch, Touch Type, and Notes, plus any prior section in `{company}-outreach.md`.
+
+Pre-filter before asking: warm follow-up is only eligible when a prior touch is on record (the tracker row has a Last Touch, or a prior outreach doc exists). If neither exists, omit that option (or mark it unavailable, with the one-line reason) rather than offering it and redirecting after the pick.
+
+Person-scoping for warm follow-ups: tracker touches are company-level, not person-level. If the prior touch was to a DIFFERENT person than the current target (check the prior outreach doc's headings), do not present it as shared history with the new target. Either reference it accurately ("I reached out to your colleague {X} about...") or ask the user how to frame it.
 
 ## Step 4: Drafting rules
 
@@ -70,11 +76,13 @@ The universal natural-voice rules from /apply hold here too, compressed for shor
 
 ### Draft and confirm
 
-Write 2-3 candidate drafts in the chosen format. For connection notes, count each candidate's characters by actually counting (e.g. `printf %s '{note}' | wc -c`), and show the count next to each candidate ("247/300"). If a draft runs over 300, cut it BEFORE presenting; never show an over-limit candidate. The user picks one or edits; revise until they approve.
+Write 2-3 candidate drafts in the chosen format. The candidates must differ substantively, not be three rewordings of the same sentence: vary the hook (funding vs product vs a recent post), the ask size (a question vs a conversation), or the opening structure. Label each with what varies (e.g. "hook: Series B", "hook: product launch") so the user can choose meaningfully.
+
+For connection notes, count each candidate's characters and show the count next to it ("247/300"). Count safely: never interpolate the note into a shell command line -- an apostrophe (near-certain in casual voice: "I'd", "there's") breaks the quoting and printf then repeats its format string, silently under- or over-counting. Instead, write the candidate to a scratch file with no trailing newline and run `wc -c < {file}` (that counts bytes; use `wc -m` instead if the note contains any non-ASCII characters). If a draft runs over 300, cut it BEFORE presenting; never show an over-limit candidate. The user picks one or edits; revise (and re-count) until they approve.
 
 ### Save the chosen set
 
-Save the approved draft(s) to `interview-prep/{company}-outreach.md`, each under a heading carrying the date, format, and target (e.g. `## 2026-07-08 - connection note - Jane Rivera`). If the file already exists from a prior run, never overwrite it: append the new dated section below the existing content, the same addendum style /recap uses. The file is the record of what was said to whom, so the next touch never repeats itself.
+Save the approved draft(s) to `interview-prep/{company}-outreach.md`, each under a heading carrying the date, format, and target (e.g. `## 2026-07-08 - connection note - Jane Rivera`). If the file already exists from a prior run, never overwrite it: append the new dated section below the existing content (the same never-overwrite, append-a-dated-section principle /prep and /recap apply to their docs; the heading shape above is this command's own). The file is the record of what was said to whom, so the next touch never repeats itself.
 
 ### Ask whether it was sent
 
